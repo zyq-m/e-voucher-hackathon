@@ -20,9 +20,10 @@ const PayNow = ({ navigation }) => {
 
   const onRoute = () => {
     alert("Payment successfull☑️");
-  const onPay = () => {
-    alert("Payment successfully☑️");
-    navigation.navigate("Student Dashboard");
+    const onPay = () => {
+      alert("Payment successfully☑️");
+      navigation.navigate("Student Dashboard");
+    };
   };
 
   return (
