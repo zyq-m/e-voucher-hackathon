@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Image } from "react-native";
+import { View, Text, Image } from "react-native";
 
 import instanceAxios from "../lib/instanceAxios";
 import { useUserContext } from "../hooks/useUserContext";
