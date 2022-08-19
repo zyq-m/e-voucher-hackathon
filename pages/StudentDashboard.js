@@ -2,17 +2,17 @@ import { useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 
 import instanceAxios from "../lib/instanceAxios";
-import { useUserContext } from "../hooks/useUserContext";
-import { useTime } from "../hooks/useTime";
+import { useTime, useUserContext } from "../hooks";
 
-import Button from "../components/Button";
-import Profile from "../components/Profile";
-import Amount from "../components/Amount";
-import TransactionContainer from "../components/TransactionContainer";
-import TransactionItem from "../components/TransactionItem";
+import {
+  Button,
+  Profile,
+  Amount,
+  TransactionContainer,
+  TransactionItem,
+} from "../components";
 
-import globals from "../styles/globals";
-import dashboardStyle from "../styles/dashboardStyle";
+import { globals, dashboardStyle } from "../styles";
 
 const StudentDashboard = ({ navigation }) => {
   const { user } = useUserContext();

@@ -1,15 +1,12 @@
 import { useState, useEffect } from "react";
 import { View, Image, TouchableOpacity } from "react-native";
 
-import TransactionItem from "../components/TransactionItem";
-import FilterList from "../components/FilterList";
+import { TransactionItem, FilterList } from "../components";
 
 import instanceAxios from "../lib/instanceAxios";
-import { useUserContext } from "../hooks/useUserContext";
-import { useTime } from "../hooks/useTime";
+import { useTime, useUserContext } from "../hooks";
 
-import globals from "../styles/globals";
-import transactionStyle from "../styles/transactionStyle";
+import { globals, transactionStyle } from "../styles";
 
 const Transaction = ({ navigation }) => {
   const [collapse, setCollapse] = useState(false);
