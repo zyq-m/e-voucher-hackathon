@@ -1,19 +1,57 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 
-import globals from "../styles/globals";
-import Profile from "../components/Profile";
-import Amount from "../components/Amount";
-import TransactionContainer from "../components/TransactionContainer";
-import TransactionItem from "../components/TransactionItem";
+import {
+  Profile,
+  Amount,
+  TransactionContainer,
+  TransactionItem,
+} from "../components";
 
-import dashboardStyle from "../styles/dashboardStyle";
+import instanceAxios from "../lib/instanceAxios";
+import { useTime, useUserContext } from "../hooks";
+
+import { globals, dashboardStyle } from "../styles";
 
 const CafeDashboard = ({ navigation }) => {
+  const { user } = useUserContext();
+  const format = useTime();
+  const [userData, setUserData] = useState({});
+  const [transactions, setTransactions] = useState([]);
+
+  const getTransactions = (id, token) => {
+    instanceAxios
+      .get(`/api/cafe/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(res => setUserData(res.data[0]))
+      .catch(err => console.error(err));
+
+    instanceAxios
+      .get(`/api/transactions/cafe/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(res => setTransactions(res.data))
+      .catch(err => console.error(err));
+  };
+
+  useEffect(() => {
+    getTransactions(user.id, user.secretToken);
+  }, []);
+
   return (
     <View style={[globals.container, { paddingTop: 22 }]}>
       <View style={dashboardStyle.logoutContainer}>
-        <Profile textField1={"Kafe Mamada"} textField2={"mamada69"} />
+        {userData && (
+          <Profile
+            textField1={userData.cafe_name}
+            textField2={userData.username}
+          />
+        )}
         <TouchableOpacity onPress={() => navigation.navigate("login")}>
           <Image
             style={dashboardStyle.logoutIcon}
@@ -37,35 +75,22 @@ const CafeDashboard = ({ navigation }) => {
           </TouchableOpacity>
         </View>
         <TransactionContainer>
-          <TransactionItem
-            field1={"012345"}
-            time={"8.00am"}
-            date={"9 July 2022"}
-            amount={"2.00"}
-            noBorder={true}
-            cafe={true}
-          />
-          <TransactionItem
-            field1={"012345"}
-            time={"8.00am"}
-            date={"9 July 2022"}
-            amount={"2.00"}
-            cafe={true}
-          />
-          <TransactionItem
-            field1={"012345"}
-            time={"8.00am"}
-            date={"9 July 2022"}
-            amount={"2.00"}
-            cafe={true}
-          />
-          <TransactionItem
-            field1={"012345"}
-            time={"8.00am"}
-            date={"9 July 2022"}
-            amount={"2.00"}
-            cafe={true}
-          />
+          {transactions &&
+            transactions.map((data, i) => {
+              const formater = format(data.created_at);
+
+              return (
+                <TransactionItem
+                  key={i}
+                  field1={data.sender}
+                  time={formater.time}
+                  date={formater.date}
+                  amount={data.amount}
+                  noBorder={i == 0 && true}
+                  cafe={true}
+                />
+              );
+            })}
         </TransactionContainer>
       </View>
     </View>

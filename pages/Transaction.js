@@ -1,58 +1,36 @@
 import { useState, useEffect } from "react";
 import { View, Image, TouchableOpacity } from "react-native";
 
-import TransactionItem from "../components/TransactionItem";
-import FilterList from "../components/FilterList";
+import { TransactionItem, FilterList } from "../components";
 
-import globals from "../styles/globals";
-import transactionStyle from "../styles/transactionStyle";
+import instanceAxios from "../lib/instanceAxios";
+import { useTime, useUserContext } from "../hooks";
 
-const data = [
-  {
-    id: 1,
-    noMatric: "012345",
-    time: "8.00am",
-    date: "9 July 2022",
-    amount: "2.00",
-  },
-  {
-    id: 2,
-    noMatric: "012345",
-    time: "8.00am",
-    date: "9 July 2022",
-    amount: "2.00",
-  },
-  {
-    id: 3,
-    noMatric: "012345",
-    time: "8.00am",
-    date: "9 July 2022",
-    amount: "2.00",
-  },
-  {
-    id: 4,
-    noMatric: "012345",
-    time: "8.00am",
-    date: "9 July 2022",
-    amount: "2.00",
-  },
-];
+import { globals, transactionStyle } from "../styles";
 
 const Transaction = ({ navigation }) => {
   const [collapse, setCollapse] = useState(false);
+  const [transactions, setTransactions] = useState([]);
+  const { user } = useUserContext();
+  const format = useTime();
 
   const onCollapse = () => setCollapse(!collapse);
+
+  const getTransactions = (id, token) => {
+    instanceAxios
+      .get(`/api/transactions/cafe/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(res => setTransactions(res.data))
+      .catch(err => console.error(err));
+  };
 
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <View style={transactionStyle.row}>
-          {/* <TouchableOpacity>
-            <Image
-              style={transactionStyle.printIcon}
-              source={require("../assets/icons/print-icon.png")}
-            />
-          </TouchableOpacity> */}
           <TouchableOpacity onPress={onCollapse}>
             <Image
               style={transactionStyle.fitlerIcon}
@@ -62,18 +40,22 @@ const Transaction = ({ navigation }) => {
         </View>
       ),
     });
-  });
+
+    getTransactions(user.id, user.secretToken);
+  }, []);
 
   return (
     <View style={[globals.container, { paddingTop: 24 }]}>
-      {data.map(transaction => {
+      {transactions.map((data, i) => {
+        const formater = format(data.created_at);
+
         return (
-          <Wrapper key={transaction.id}>
+          <Wrapper key={i}>
             <TransactionItem
-              field1={transaction.noMatric}
-              time={transaction.time}
-              date={transaction.date}
-              amount={transaction.amount}
+              field1={data.sender}
+              time={formater.time}
+              date={formater.date}
+              amount={data.amount}
               cafe={true}
               noBorder={true}
             />

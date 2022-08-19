@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 
-import Button from "../components/Button";
+import { Button } from "../components";
 
-import globals from "../styles/globals";
-import payNowStyle from "../styles/payNowStyle";
+import { globals, payNowStyle } from "../styles";
 
 const PayNow = ({ navigation }) => {
   const [active, setActive] = useState({ btn1: true, btn2: false });

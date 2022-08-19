@@ -1,15 +1,13 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Image } from "react-native";
+import { View, Text, Image } from "react-native";
 
 import instanceAxios from "../lib/instanceAxios";
-import { useUserContext } from "../hooks/useUserContext";
+import { useUserContext } from "../hooks";
 import { save, getValueFor } from "../utils/SecureStore";
 
-import Button from "../components/Button";
-import Input from "../components/Input";
+import { Button, Input } from "../components";
 
-import globals from "../styles/globals";
-import loginStyle from "../styles/loginStyle";
+import { globals, loginStyle } from "../styles";
 
 const Login = ({ navigation }) => {
   const [cafeOwner, setCafeOwner] = useState(false);

@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react";
 import { View, Image } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 
-import Button from "../components/Button";
+import { Button } from "../components";
 
-import globals from "../styles/globals";
-import QRScanStyle from "../styles/QRScanStyle";
+import { globals, QRScanStyle } from "../styles";
 
 const QRScan = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);

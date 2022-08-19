@@ -24,33 +24,41 @@ export default function App() {
           initialRouteName="login"
           screenOptions={{ headerShown: false }}
         >
-          <Stack.Screen name="login" component={Login} />
-          <Stack.Screen name="Student Dashboard" component={StudentDashboard} />
-          <Stack.Screen name="Cafe Dashboard" component={CafeDashboard} />
-          <Stack.Screen
-            name="Pay Now"
-            component={PayNow}
-            options={{
-              headerShown: true,
-              headerTitleAlign: "center",
-            }}
-          />
-          <Stack.Screen
-            name="QR Scan"
-            component={QRScan}
-            options={{
-              headerShown: true,
-              headerTitleAlign: "center",
-            }}
-          />
-          <Stack.Screen
-            name="Transactions"
-            component={Transaction}
-            options={{
-              headerShown: true,
-              headerTitleAlign: "center",
-            }}
-          />
+          {user.login ? (
+            <>
+              <Stack.Screen
+                name="Student Dashboard"
+                component={StudentDashboard}
+              />
+              <Stack.Screen name="Cafe Dashboard" component={CafeDashboard} />
+              <Stack.Screen
+                name="Pay Now"
+                component={PayNow}
+                options={{
+                  headerShown: true,
+                  headerTitleAlign: "center",
+                }}
+              />
+              <Stack.Screen
+                name="QR Scan"
+                component={QRScan}
+                options={{
+                  headerShown: true,
+                  headerTitleAlign: "center",
+                }}
+              />
+              <Stack.Screen
+                name="Transactions"
+                component={Transaction}
+                options={{
+                  headerShown: true,
+                  headerTitleAlign: "center",
+                }}
+              />
+            </>
+          ) : (
+            <Stack.Screen name="login" component={Login} />
+          )}
         </Stack.Navigator>
         <StatusBar style="auto" />
       </UserContext.Provider>
