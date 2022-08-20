@@ -14,7 +14,7 @@ import { useTime, useUserContext } from "../hooks";
 import { globals, dashboardStyle } from "../styles";
 
 const CafeDashboard = ({ navigation }) => {
-  const { user } = useUserContext();
+  const { user, setUser } = useUserContext();
   const format = useTime();
   const [userData, setUserData] = useState({});
   const [transactions, setTransactions] = useState([]);
@@ -61,7 +61,11 @@ const CafeDashboard = ({ navigation }) => {
             textField2={userData.username}
           />
         )}
-        <TouchableOpacity onPress={() => navigation.navigate("login")}>
+        <TouchableOpacity
+          onPress={() =>
+            setUser({ id: undefined, login: false, student: false })
+          }
+        >
           <Image
             style={dashboardStyle.logoutIcon}
             source={require("../assets/icons/logout-icon.png")}

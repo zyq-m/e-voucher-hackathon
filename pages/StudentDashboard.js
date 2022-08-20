@@ -15,7 +15,7 @@ import {
 import { globals, dashboardStyle } from "../styles";
 
 const StudentDashboard = ({ navigation }) => {
-  const { user } = useUserContext();
+  const { user, setUser } = useUserContext();
   const format = useTime();
   const [userData, setUserData] = useState({});
   const [transactionData, setTransactionData] = useState([]);
@@ -53,7 +53,11 @@ const StudentDashboard = ({ navigation }) => {
             textField2={userData.matric_no}
           />
         )}
-        <TouchableOpacity onPress={() => navigation.navigate("login")}>
+        <TouchableOpacity
+          onPress={() =>
+            setUser({ id: undefined, login: false, student: false })
+          }
+        >
           <Image
             style={dashboardStyle.logoutIcon}
             source={require("../assets/icons/logout-icon.png")}
