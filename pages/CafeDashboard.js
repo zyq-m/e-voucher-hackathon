@@ -18,6 +18,7 @@ const CafeDashboard = ({ navigation }) => {
   const format = useTime();
   const [userData, setUserData] = useState({});
   const [transactions, setTransactions] = useState([]);
+  const [total, setTotal] = useState(0);
 
   const getTransactions = (id, token) => {
     instanceAxios
@@ -35,7 +36,15 @@ const CafeDashboard = ({ navigation }) => {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then(res => setTransactions(res.data))
+      .then(res => {
+        setTransactions(res.data);
+        res.data.map(data => {
+          // let total = 0;
+          // total += parseInt(data.amount);
+
+          console.log(total);
+        });
+      })
       .catch(err => console.error(err));
   };
 
@@ -60,7 +69,7 @@ const CafeDashboard = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <View style={{ marginTop: 24 }}>
-        <Amount amount={8} student={false} />
+        <Amount amount={total} student={false} />
       </View>
       <View style={{ marginTop: 40 }}>
         <View style={[dashboardStyle.transactionHeaderWrap]}>

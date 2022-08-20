@@ -16,10 +16,11 @@ const Login = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const { setUser } = useUserContext();
 
-  const authUser = (id, secret, refresh) => {
+  const authUser = (id, student, secret, refresh) => {
     setUser({
       id: id,
       login: true,
+      student: student,
       secretToken: secret,
       refreshToken: refresh,
     });
@@ -33,8 +34,8 @@ const Login = ({ navigation }) => {
           password: password,
         })
         .then(res => {
-          authUser(cafeAcc, res.data.accessToken, res.data.refreshToken);
-          navigation.navigate("Cafe Dashboard");
+          authUser(cafeAcc, false, res.data.accessToken, res.data.refreshToken);
+          navigation.navigate("Cafe", { screen: "Cafe Dashboard" });
         })
         .catch(err => alert(err));
     } else {
@@ -44,8 +45,13 @@ const Login = ({ navigation }) => {
           password: password,
         })
         .then(res => {
-          authUser(studentAcc, res.data.accessToken, res.data.refreshToken);
-          navigation.navigate("Student Dashboard");
+          authUser(
+            studentAcc,
+            true,
+            res.data.accessToken,
+            res.data.refreshToken
+          );
+          navigation.navigate("Student", { screen: "Student Dashboard" });
         })
         .catch(err => alert(err));
     }

@@ -36,10 +36,7 @@ const StudentDashboard = ({ navigation }) => {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then(res => {
-        setTransactionData(res.data);
-        console.log(res.data);
-      })
+      .then(res => setTransactionData(res.data))
       .catch(err => console.error(err));
   };
 
