@@ -37,13 +37,13 @@ const CafeDashboard = ({ navigation }) => {
         },
       })
       .then(res => {
+        let total = 0;
+
         setTransactions(res.data);
         res.data.map(data => {
-          // let total = 0;
-          // total += parseInt(data.amount);
-
-          console.log(total);
+          total += parseInt(data.amount);
         });
+        setTotal(total);
       })
       .catch(err => console.error(err));
   };
