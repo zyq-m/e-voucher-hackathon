@@ -65,7 +65,9 @@ const StudentDashboard = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <View style={{ marginTop: 24 }}>
-        {userData && <Amount amount={userData.wallet_amount} student={true} />}
+        {userData && (
+          <Amount amount={parseInt(userData.wallet_amount)} student={true} />
+        )}
       </View>
       <View style={{ marginTop: 20 }}>
         <Button label={"Pay"} onPress={() => navigation.navigate("QR Scan")} />

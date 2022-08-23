@@ -5,29 +5,37 @@ import { TransactionItem, FilterList } from "../components";
 
 import instanceAxios from "../lib/instanceAxios";
 import { useTime, useUserContext } from "../hooks";
+import { useFilterDate } from "../utils/filterDate";
 
 import { globals, transactionStyle } from "../styles";
 
 const Transaction = ({ navigation }) => {
   const [collapse, setCollapse] = useState(false);
   const [transactions, setTransactions] = useState([]);
+  const [filter, setFilter] = useState({
+    today: false,
+    week: false,
+    month: false,
+  });
+
   const { user } = useUserContext();
   const format = useTime();
+  const filterDate = useFilterDate();
 
   const onCollapse = () => setCollapse(!collapse);
 
   const getTransactions = (id, token) => {
-    instanceAxios
+    return instanceAxios
       .get(`/api/transactions/cafe/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then(res => setTransactions(res.data))
+      .then(res => res.data)
       .catch(err => console.error(err));
   };
 
-  useEffect(() => {
+  useEffect(async () => {
     navigation.setOptions({
       headerRight: () => (
         <View style={transactionStyle.row}>
@@ -41,8 +49,17 @@ const Transaction = ({ navigation }) => {
       ),
     });
 
-    getTransactions(user.id, user.secretToken);
+    const data = await getTransactions(user.id, user.secretToken);
+    setTransactions(data);
   }, []);
+
+  // useEffect(() => {
+  //   filter.today && setTransactions(filterDate(transactions).today);
+  //   filter.week && setTransactions(filterDate(transactions).week);
+  //   filter.month && setTransactions(filterDate(transactions).month);
+
+  //   console.log(transactions);
+  // }, [filter]);
 
   return (
     <View style={[globals.container, { paddingTop: 24 }]}>
@@ -63,7 +80,12 @@ const Transaction = ({ navigation }) => {
         );
       })}
 
-      {collapse && <FilterList onCollapse={onCollapse} />}
+      {collapse && (
+        <FilterList
+          onCollapse={onCollapse}
+          filterState={state => setFilter(state)}
+        />
+      )}
     </View>
   );
 };
