@@ -17,6 +17,7 @@ const StudentNav = () => {
         name="Pay"
         component={PayNow}
         options={{
+          title: "Choose amount",
           headerTitleAlign: "center",
         }}
       />
