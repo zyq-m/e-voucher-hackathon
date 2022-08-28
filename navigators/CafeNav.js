@@ -1,7 +1,8 @@
-import { Stack } from "../App";
-
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import CafeDashboard from "../pages/CafeDashboard";
 import Transaction from "../pages/Transaction";
+
+const Stack = createNativeStackNavigator();
 
 const CafeNav = () => {
   return (
