@@ -14,7 +14,7 @@ const StudentNav = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Pay Now"
+        name="Pay"
         component={PayNow}
         options={{
           headerTitleAlign: "center",
