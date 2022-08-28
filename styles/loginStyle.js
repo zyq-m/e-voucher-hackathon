@@ -9,6 +9,7 @@ const loginStyle = StyleSheet.create({
   logo: {
     width: 212,
     height: 99,
+    alignSelf: "center",
   },
   inputContainer: {
     flexDirection: "row",
