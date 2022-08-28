@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 
 import instanceAxios from "../lib/instanceAxios";
 import { useTime, useUserContext } from "../hooks";
+import { getValueFor } from "../utils/SecureStore";
 
 import {
   Button,
@@ -41,7 +42,7 @@ const StudentDashboard = ({ navigation }) => {
   };
 
   useEffect(() => {
-    fetchUser(user.id, user.secretToken);
+    getValueFor("accessToken").then(res => fetchUser(user.id, res));
   }, []);
 
   return (
@@ -70,7 +71,7 @@ const StudentDashboard = ({ navigation }) => {
         )}
       </View>
       <View style={{ marginTop: 20 }}>
-        <Button label={"Pay"} onPress={() => navigation.navigate("QR Scan")} />
+        <Button label={"Pay"} onPress={() => navigation.navigate("Pay")} />
       </View>
       <View style={{ marginTop: 40 }}>
         <View style={[dashboardStyle.transactionHeaderWrap]}>
