@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { View, Text, Image } from "react-native";
 
-import instanceAxios from "../lib/instanceAxios";
+import { loginCafe, loginStudent } from "../lib/API";
 import { useUserContext } from "../hooks";
-import { save, getValueFor } from "../utils/SecureStore";
 
 import { Button, Input } from "../components";
 
@@ -16,44 +15,39 @@ const Login = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const { setUser } = useUserContext();
 
-  const authUser = (id, student, secret, refresh) => {
+  const authUser = (id, student) => {
     setUser({
       id: id,
       login: true,
       student: student,
-      secretToken: secret,
-      refreshToken: refresh,
     });
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (cafeOwner) {
-      instanceAxios
-        .post("/cafe/login", {
-          username: cafeAcc,
-          password: password,
-        })
-        .then(res => {
-          authUser(cafeAcc, false, res.data.accessToken, res.data.refreshToken);
-          navigation.navigate("Cafe", { screen: "Cafe Dashboard" });
-        })
-        .catch(err => alert(err));
+      const res = await loginCafe({
+        username: cafeAcc,
+        password: password,
+      });
+
+      if (res) {
+        authUser(cafeAcc, false);
+        navigation.navigate("Cafe", { screen: "Cafe Dashboard" });
+      } else {
+        alert("Invalid username or password");
+      }
     } else {
-      instanceAxios
-        .post("/students/login", {
-          matric_no: studentAcc,
-          password: password,
-        })
-        .then(res => {
-          authUser(
-            studentAcc,
-            true,
-            res.data.accessToken,
-            res.data.refreshToken
-          );
-          navigation.navigate("Student", { screen: "Student Dashboard" });
-        })
-        .catch(err => alert(err));
+      const res = await loginStudent({
+        matric_no: studentAcc,
+        password: password,
+      });
+
+      if (res) {
+        authUser(studentAcc, true);
+        navigation.navigate("Student", { screen: "Student Dashboard" });
+      } else {
+        alert("Invalid matric no or password");
+      }
     }
   };
 
