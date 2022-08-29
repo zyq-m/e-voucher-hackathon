@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 
 import instanceAxios from "../lib/instanceAxios";
 import { useTime, useUserContext } from "../hooks";
-import { getValueFor } from "../utils/SecureStore";
+import { getValueFor, deleteItem } from "../utils/SecureStore";
 
 import {
   Button,
@@ -18,7 +18,11 @@ import { globals, dashboardStyle } from "../styles";
 const StudentDashboard = ({ navigation }) => {
   const { user, setUser } = useUserContext();
   const format = useTime();
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState({
+    student_name: "",
+    matric_no: "",
+    wallet_amount: 0,
+  });
   const [transactionData, setTransactionData] = useState([]);
 
   const fetchUser = (id, token) => {
@@ -43,7 +47,7 @@ const StudentDashboard = ({ navigation }) => {
 
   useEffect(() => {
     getValueFor("accessToken").then(res => fetchUser(user.id, res));
-  }, []);
+  }, [userData]);
 
   return (
     <View style={[globals.container, { paddingTop: 48 }]}>
@@ -55,9 +59,11 @@ const StudentDashboard = ({ navigation }) => {
           />
         )}
         <TouchableOpacity
-          onPress={() =>
-            setUser({ id: undefined, login: false, student: false })
-          }
+          onPress={async () => {
+            await deleteItem("accessToken");
+            await deleteItem("refreshToken");
+            setUser({ id: undefined, login: false, student: false });
+          }}
         >
           <Image
             style={dashboardStyle.logoutIcon}

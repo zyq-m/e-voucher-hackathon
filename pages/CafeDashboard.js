@@ -10,6 +10,7 @@ import {
 
 import instanceAxios from "../lib/instanceAxios";
 import { useTime, useUserContext } from "../hooks";
+import { getValueFor, deleteItem } from "../utils/SecureStore";
 
 import { globals, dashboardStyle } from "../styles";
 
@@ -49,11 +50,11 @@ const CafeDashboard = ({ navigation }) => {
   };
 
   useEffect(() => {
-    getTransactions(user.id, user.secretToken);
-  }, []);
+    getValueFor("accessToken").then(token => getTransactions(user.id, token));
+  }, [userData]);
 
   return (
-    <View style={[globals.container, { paddingTop: 22 }]}>
+    <View style={[globals.container, { paddingTop: 48 }]}>
       <View style={dashboardStyle.logoutContainer}>
         {userData && (
           <Profile
@@ -62,9 +63,11 @@ const CafeDashboard = ({ navigation }) => {
           />
         )}
         <TouchableOpacity
-          onPress={() =>
-            setUser({ id: undefined, login: false, student: false })
-          }
+          onPress={async () => {
+            await deleteItem("accessToken");
+            await deleteItem("refreshToken");
+            setUser({ id: undefined, login: false, student: false });
+          }}
         >
           <Image
             style={dashboardStyle.logoutIcon}

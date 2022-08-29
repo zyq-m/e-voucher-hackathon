@@ -18,11 +18,14 @@ const PayNow = ({ navigation }) => {
   };
 
   const onRoute = () => {
-    alert("Payment successfull☑️");
-    const onPay = () => {
-      alert("Payment successfully☑️");
-      navigation.navigate("Student Dashboard");
-    };
+    let amount = 0;
+    if (active.btn1) {
+      amount = 1;
+    } else {
+      amount = 2;
+    }
+
+    navigation.navigate("Cafe List", { amount: amount });
   };
 
   return (
@@ -55,8 +58,7 @@ const PayNow = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <View style={{ paddingBottom: 24 }}>
-        <Button label={"Pay Now"} onPress={onRoute} />
-        <Button label={"Pay Now"} onAction={onPay} />
+        <Button label={"Next"} onPress={onRoute} />
       </View>
     </View>
   );

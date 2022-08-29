@@ -8,6 +8,7 @@ import { useTime, useUserContext } from "../hooks";
 import { useFilterDate } from "../utils/filterDate";
 
 import { globals, transactionStyle } from "../styles";
+import { getValueFor } from "../utils/SecureStore";
 
 const Transaction = ({ navigation }) => {
   const [collapse, setCollapse] = useState(false);
@@ -32,26 +33,37 @@ const Transaction = ({ navigation }) => {
         },
       })
       .then(res => res.data)
-      .catch(err => console.error(err));
+      .catch(() => false);
   };
 
-  useEffect(async () => {
-    navigation.setOptions({
-      headerRight: () => (
-        <View style={transactionStyle.row}>
-          <TouchableOpacity onPress={onCollapse}>
-            <Image
-              style={transactionStyle.fitlerIcon}
-              source={require("../assets/icons/filter-icon.png")}
-            />
-          </TouchableOpacity>
-        </View>
-      ),
-    });
+  useEffect(() => {
+    const render = async () => {
+      const token = await getValueFor("accessToken");
+      const res = await getTransactions(user.id, token);
 
-    const data = await getTransactions(user.id, user.secretToken);
-    setTransactions(data);
+      navigation.setOptions({
+        headerRight: () => (
+          <View style={transactionStyle.row}>
+            <TouchableOpacity onPress={onCollapse}>
+              <Image
+                style={transactionStyle.fitlerIcon}
+                source={require("../assets/icons/filter-icon.png")}
+              />
+            </TouchableOpacity>
+          </View>
+        ),
+      });
+
+      res && setTransactions(res);
+    };
+    render();
   }, []);
+
+  // useEffect(
+  //   () =>
+  //     ),
+  //   []
+  // );
 
   // useEffect(() => {
   //   filter.today && setTransactions(filterDate(transactions).today);
@@ -63,22 +75,23 @@ const Transaction = ({ navigation }) => {
 
   return (
     <View style={[globals.container, { paddingTop: 24 }]}>
-      {transactions.map((data, i) => {
-        const formater = format(data.created_at);
+      {transactions &&
+        transactions.map((data, i) => {
+          const formater = format(data.created_at);
 
-        return (
-          <Wrapper key={i}>
-            <TransactionItem
-              field1={data.sender}
-              time={formater.time}
-              date={formater.date}
-              amount={data.amount}
-              cafe={true}
-              noBorder={true}
-            />
-          </Wrapper>
-        );
-      })}
+          return (
+            <Wrapper key={i}>
+              <TransactionItem
+                field1={data.sender}
+                time={formater.time}
+                date={formater.date}
+                amount={data.amount}
+                cafe={true}
+                noBorder={true}
+              />
+            </Wrapper>
+          );
+        })}
 
       {collapse && (
         <FilterList
