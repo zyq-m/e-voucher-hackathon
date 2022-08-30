@@ -67,7 +67,7 @@ const FilterList = ({ onCollapse, filterState }) => {
             onActive={() => onChecked("month")}
           />
         </View>
-        <View style={{ marginTop: 20 }}>
+        <View style={{ marginVertical: 20 }}>
           <Button label={"Print"} />
         </View>
       </View>
