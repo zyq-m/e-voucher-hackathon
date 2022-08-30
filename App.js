@@ -15,6 +15,7 @@ export default function App() {
     id: undefined,
     login: false,
     student: false,
+    refresh: false,
   });
 
   return (
