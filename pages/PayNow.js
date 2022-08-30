@@ -25,7 +25,7 @@ const PayNow = ({ navigation }) => {
       amount = 2;
     }
 
-    navigation.navigate("Cafe List", { amount: amount });
+    navigation.navigate("QR Scan", { amount: amount });
   };
 
   return (
