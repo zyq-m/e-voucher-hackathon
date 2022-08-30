@@ -6,6 +6,7 @@ import {
   Amount,
   TransactionContainer,
   TransactionItem,
+  Refresh,
 } from "../components";
 
 import instanceAxios from "../lib/instanceAxios";
@@ -51,64 +52,73 @@ const CafeDashboard = ({ navigation }) => {
 
   useEffect(() => {
     getValueFor("accessToken").then(token => getTransactions(user.id, token));
-  }, [userData]);
+  }, [user.refresh]);
 
   return (
     <View style={[globals.container, { paddingTop: 48 }]}>
-      <View style={dashboardStyle.logoutContainer}>
-        {userData && (
-          <Profile
-            textField1={userData.cafe_name}
-            textField2={userData.username}
-          />
-        )}
-        <TouchableOpacity
-          onPress={async () => {
-            await deleteItem("accessToken");
-            await deleteItem("refreshToken");
-            setUser({ id: undefined, login: false, student: false });
-          }}
-        >
-          <Image
-            style={dashboardStyle.logoutIcon}
-            source={require("../assets/icons/logout-icon.png")}
-          />
-        </TouchableOpacity>
-      </View>
-      <View style={{ marginTop: 24 }}>
-        <Amount amount={total} student={false} />
-      </View>
-      <View style={{ marginTop: 40 }}>
-        <View style={[dashboardStyle.transactionHeaderWrap]}>
-          <Text style={dashboardStyle.transactionHeader}>
-            Recent transaction
-          </Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Transactions")}>
+      <Refresh>
+        <View style={dashboardStyle.logoutContainer}>
+          {userData && (
+            <Profile
+              textField1={userData.cafe_name}
+              textField2={userData.username}
+            />
+          )}
+          <TouchableOpacity
+            onPress={async () => {
+              await deleteItem("accessToken");
+              await deleteItem("refreshToken");
+              setUser(prev => ({
+                ...prev,
+                id: undefined,
+                login: false,
+                student: false,
+              }));
+            }}
+          >
             <Image
-              style={{ width: 25, height: 25 }}
-              source={require("../assets/icons/more-icon.png")}
+              style={dashboardStyle.logoutIcon}
+              source={require("../assets/icons/logout-icon.png")}
             />
           </TouchableOpacity>
         </View>
-        <TransactionContainer>
-          {transactions &&
-            transactions.map((data, i) => {
-              const formater = format(data.created_at);
+        <View style={{ marginTop: 24 }}>
+          <Amount amount={total} student={false} />
+        </View>
+        <View style={{ marginTop: 40, marginBottom: 24 }}>
+          <View style={[dashboardStyle.transactionHeaderWrap]}>
+            <Text style={dashboardStyle.transactionHeader}>
+              Recent transaction
+            </Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Transactions")}
+            >
+              <Image
+                style={{ width: 25, height: 25 }}
+                source={require("../assets/icons/more-icon.png")}
+              />
+            </TouchableOpacity>
+          </View>
+          <TransactionContainer>
+            {transactions &&
+              transactions.map((data, i) => {
+                const formater = format(data.created_at);
 
-              return (
-                <TransactionItem
-                  key={i}
-                  field1={data.sender}
-                  time={formater.time}
-                  date={formater.date}
-                  amount={data.amount}
-                  noBorder={i == 0 && true}
-                  cafe={true}
-                />
-              );
-            })}
-        </TransactionContainer>
-      </View>
+                return (
+                  <TransactionItem
+                    key={i}
+                    field1={data.sender}
+                    time={formater.time}
+                    date={formater.date}
+                    amount={data.amount}
+                    noBorder={i == 0 && true}
+                    cafe={true}
+                  />
+                );
+              })}
+          </TransactionContainer>
+        </View>
+      </Refresh>
     </View>
   );
 };
