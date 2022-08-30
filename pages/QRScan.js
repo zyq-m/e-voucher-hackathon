@@ -3,6 +3,9 @@ import { View, Image } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 
 import { Button } from "../components";
+import { setTransactions } from "../lib/API/setTransaction";
+import { getValueFor } from "../utils/SecureStore";
+import { useUserContext } from "../hooks";
 
 import { globals, QRScanStyle } from "../styles";
 
@@ -10,6 +13,7 @@ const QRScan = ({ navigation, route }) => {
   const { amount } = route.params;
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
+  const { user } = useUserContext();
 
   const handlePermission = async () => {
     const { status } = await BarCodeScanner.requestPermissionsAsync();
@@ -18,7 +22,48 @@ const QRScan = ({ navigation, route }) => {
     }
   };
 
-  const handleQRScan = ({ data }) => {
+  const checkURL = url => {
+    const arrURL = url.split("api/");
+    if (arrURL.length == 2) return arrURL[1];
+    else false;
+  };
+
+  const navigate = () => {
+    setScanned(true);
+    navigation.navigate("Student Dashboard");
+  };
+
+  const handleQRScan = async ({ data }) => {
+    const cafeId = checkURL(data);
+    const bodyData = {
+      sender: user.id,
+      amount: amount,
+    };
+
+    // try {
+
+    //   if (cafeId) {
+    //     const response = await setTransactions(cafeId, token, bodyData);
+    //     response && navigate();
+    //   } else {
+    //     alert("Invalid");
+    //   }
+    // } catch (error) {
+    //   alert("Error occur");
+    // }
+
+    if (cafeId) {
+      const token = await getValueFor("accessToken");
+      setTransactions(cafeId, token, bodyData)
+        .then(() => {
+          alert("Payment successful👍");
+          navigate();
+        })
+        .catch(() => alert("Error occur"));
+    } else {
+      alert("Invalid QR code. Please scan again");
+    }
+
     setScanned(true);
   };
 
