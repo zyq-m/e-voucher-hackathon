@@ -16,11 +16,12 @@ const Login = ({ navigation }) => {
   const { setUser } = useUserContext();
 
   const authUser = (id, student) => {
-    setUser({
+    setUser(prev => ({
+      ...prev,
       id: id,
       login: true,
       student: student,
-    });
+    }));
   };
 
   const onSubmit = async () => {
