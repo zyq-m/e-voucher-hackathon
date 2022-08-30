@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { View, Image, TouchableOpacity } from "react-native";
 
-import { TransactionItem, FilterList } from "../components";
+import { Refresh, TransactionItem, FilterList } from "../components";
 
 import instanceAxios from "../lib/instanceAxios";
 import { useTime, useUserContext } from "../hooks";
@@ -23,7 +23,7 @@ const Transaction = ({ navigation }) => {
   const format = useTime();
   const filterDate = useFilterDate();
 
-  const onCollapse = () => setCollapse(!collapse);
+  const onCollapse = () => setCollapse(prev => !prev);
 
   const getTransactions = (id, token) => {
     return instanceAxios
@@ -37,10 +37,7 @@ const Transaction = ({ navigation }) => {
   };
 
   useEffect(() => {
-    const render = async () => {
-      const token = await getValueFor("accessToken");
-      const res = await getTransactions(user.id, token);
-
+    const header = async () => {
       navigation.setOptions({
         headerRight: () => (
           <View style={transactionStyle.row}>
@@ -53,11 +50,20 @@ const Transaction = ({ navigation }) => {
           </View>
         ),
       });
+    };
+
+    header();
+  }, []);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const token = await getValueFor("accessToken");
+      const res = await getTransactions(user.id, token);
 
       res && setTransactions(res);
     };
-    render();
-  }, []);
+    fetch();
+  }, [user.refresh]);
 
   // useEffect(
   //   () =>
@@ -74,25 +80,28 @@ const Transaction = ({ navigation }) => {
   // }, [filter]);
 
   return (
-    <View style={[globals.container, { paddingTop: 24 }]}>
-      {transactions &&
-        transactions.map((data, i) => {
-          const formater = format(data.created_at);
+    <View style={[globals.container]}>
+      <Refresh>
+        <View style={{ paddingBottom: 24 }}>
+          {transactions &&
+            transactions.map((data, i) => {
+              const formater = format(data.created_at);
 
-          return (
-            <Wrapper key={i}>
-              <TransactionItem
-                field1={data.sender}
-                time={formater.time}
-                date={formater.date}
-                amount={data.amount}
-                cafe={true}
-                noBorder={true}
-              />
-            </Wrapper>
-          );
-        })}
-
+              return (
+                <Wrapper key={i}>
+                  <TransactionItem
+                    field1={data.sender}
+                    time={formater.time}
+                    date={formater.date}
+                    amount={data.amount}
+                    cafe={true}
+                    noBorder={true}
+                  />
+                </Wrapper>
+              );
+            })}
+        </View>
+      </Refresh>
       {collapse && (
         <FilterList
           onCollapse={onCollapse}
