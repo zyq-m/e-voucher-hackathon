@@ -3,7 +3,8 @@ import { View, Image, Text, TouchableOpacity } from "react-native";
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
 
-import { Button, FilterItem } from "../components";
+import Button from "./Button";
+import FilterItem from "./FilterItem";
 
 import filterStyle from "../styles/filterStyle";
 
@@ -43,7 +44,6 @@ const FilterList = ({ onCollapse, filterState }) => {
 
   const generatePDF = async () => {
     const { uri } = await printToFileAsync({ html });
-    console.log(uri);
     await shareAsync(uri, { UTI: ".pdf", mimeType: "application/pdf" });
   };
 

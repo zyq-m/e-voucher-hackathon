@@ -1,4 +1,5 @@
 import { View, Image, Text, TouchableOpacity } from "react-native";
+import filterStyle from "../styles/filterStyle";
 
 const FilterItem = ({ label, active, onActive }) => {
   return (
