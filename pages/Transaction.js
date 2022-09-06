@@ -1,26 +1,22 @@
 import { useState, useEffect } from "react";
 import { View, Image, TouchableOpacity } from "react-native";
+import moment from "moment";
 
 import { Refresh, TransactionItem, FilterList } from "../components";
 
 import instanceAxios from "../lib/instanceAxios";
-import { useTime, useUserContext } from "../hooks";
+import { useUserContext } from "../hooks";
 import { useFilterDate } from "../utils/filterDate";
+import { getValueFor } from "../utils/SecureStore";
 
 import { globals, transactionStyle } from "../styles";
-import { getValueFor } from "../utils/SecureStore";
 
 const Transaction = ({ navigation }) => {
   const [collapse, setCollapse] = useState(false);
   const [transactions, setTransactions] = useState([]);
-  const [filter, setFilter] = useState({
-    today: false,
-    week: false,
-    month: false,
-  });
+  const [filter, setFilter] = useState([]);
 
   const { user } = useUserContext();
-  const format = useTime();
   const filterDate = useFilterDate();
 
   const onCollapse = () => setCollapse(prev => !prev);
@@ -65,39 +61,23 @@ const Transaction = ({ navigation }) => {
     fetch();
   }, [user.refresh]);
 
-  // useEffect(
-  //   () =>
-  //     ),
-  //   []
-  // );
-
-  // useEffect(() => {
-  //   filter.today && setTransactions(filterDate(transactions).today);
-  //   filter.week && setTransactions(filterDate(transactions).week);
-  //   filter.month && setTransactions(filterDate(transactions).month);
-
-  //   console.log(transactions);
-  // }, [filter]);
-
   return (
     <View style={[globals.container]}>
       <Refresh>
         <View style={{ paddingBottom: 24 }}>
           {transactions &&
-            transactions.map((data, i) => {
-              const formater = format(data.created_at);
-
+            transactions.map(({ sender, amount, created_at }, i) => {
               return (
-                <Wrapper key={i}>
+                <View style={transactionStyle.transactionItemWrap} key={i}>
                   <TransactionItem
-                    field1={data.sender}
-                    time={formater.time}
-                    date={formater.date}
-                    amount={data.amount}
+                    field1={sender}
+                    time={moment(created_at).format("h.mma")}
+                    date={moment(created_at).format("D-MM")}
+                    amount={amount}
                     cafe={true}
                     noBorder={true}
                   />
-                </Wrapper>
+                </View>
               );
             })}
         </View>
@@ -110,10 +90,6 @@ const Transaction = ({ navigation }) => {
       )}
     </View>
   );
-};
-
-const Wrapper = ({ children }) => {
-  return <View style={transactionStyle.transactionItemWrap}>{children}</View>;
 };
 
 export default Transaction;
