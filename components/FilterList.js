@@ -1,40 +1,42 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, Image, Text, TouchableOpacity } from "react-native";
 
 import Button from "./Button";
 
 import filterStyle from "../styles/filterStyle";
 
-const FilterList = ({ onCollapse }) => {
+const FilterList = ({ onCollapse, filterState }) => {
   const [checked, setChecked] = useState({
-    item1: true,
-    item2: false,
-    item3: false,
+    today: true,
+    week: false,
+    month: false,
   });
 
   const onChecked = item => {
-    if (item === "item1") {
+    if (item === "today") {
       setChecked({
-        item1: true,
-        item2: false,
-        item3: false,
+        today: true,
+        week: false,
+        month: false,
       });
     }
-    if (item === "item2") {
+    if (item === "week") {
       setChecked({
-        item1: false,
-        item2: true,
-        item3: false,
+        today: false,
+        week: true,
+        month: false,
       });
     }
-    if (item === "item3") {
+    if (item === "month") {
       setChecked({
-        item1: false,
-        item2: false,
-        item3: true,
+        today: false,
+        week: false,
+        month: true,
       });
     }
   };
+
+  useEffect(() => filterState(checked), [checked]);
 
   return (
     <View style={filterStyle.fitlerBackDrop}>
@@ -51,21 +53,21 @@ const FilterList = ({ onCollapse }) => {
         <View style={{ marginTop: 10 }}>
           <FilterItem
             label={"Today"}
-            active={checked.item1}
-            onActive={() => onChecked("item1")}
+            active={checked.today}
+            onActive={() => onChecked("today")}
           />
           <FilterItem
             label={"Week"}
-            active={checked.item2}
-            onActive={() => onChecked("item2")}
+            active={checked.week}
+            onActive={() => onChecked("week")}
           />
           <FilterItem
             label={"Month"}
-            active={checked.item3}
-            onActive={() => onChecked("item3")}
+            active={checked.month}
+            onActive={() => onChecked("month")}
           />
         </View>
-        <View style={{ marginTop: 20 }}>
+        <View style={{ marginVertical: 20 }}>
           <Button label={"Print"} />
         </View>
       </View>

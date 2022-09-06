@@ -5,8 +5,10 @@ import Input from "./Input";
 import Profile from "./Profile";
 import TransactionContainer from "./TransactionContainer";
 import TransactionItem from "./TransactionItem";
+import Refresh from "./Refresh";
 
 export {
+  Refresh,
   Amount,
   Button,
   FilterList,
