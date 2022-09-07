@@ -1,64 +1,21 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { View, Image, Text, TouchableOpacity } from "react-native";
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
 
 import Button from "./Button";
 import FilterItem from "./FilterItem";
+import DocumentTemplate from "./DocumentTemplate";
 
 import filterStyle from "../styles/filterStyle";
 
-const html = `
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
-  </head>
-  <body style="text-align: center;">
-    <h1 style="font-size: 50px; font-family: Helvetica Neue; font-weight: normal;">
-      Hello Sayang
-    </h1>
-    <p>Tok generated pdf yerrrr HAHAHHAHAH</p>
-    <p>♥♥</p>
-  </body>
-</html>
-`;
-
-const FilterList = ({ onCollapse, filterState }) => {
-  const [list, setList] = useState([
-    {
-      id: 0,
-      label: "Today",
-      checked: true,
-    },
-    {
-      id: 1,
-      label: "Week",
-      checked: false,
-    },
-    {
-      id: 2,
-      label: "Month",
-      checked: false,
-    },
-  ]);
-
+const FilterList = ({ onCollapse, list, onList, document }) => {
   const generatePDF = async () => {
-    const { uri } = await printToFileAsync({ html });
+    const { uri } = await printToFileAsync({
+      html: DocumentTemplate(document),
+    });
     await shareAsync(uri, { UTI: ".pdf", mimeType: "application/pdf" });
   };
-
-  const onList = id =>
-    setList(prev =>
-      prev.map(data => {
-        if (data.id == id) {
-          return { ...data, checked: true };
-        } else {
-          return { ...data, checked: false };
-        }
-      })
-    );
-
-  useEffect(() => filterState(list), [list]);
 
   return (
     <View style={filterStyle.fitlerBackDrop}>
