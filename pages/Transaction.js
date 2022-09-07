@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, Image, TouchableOpacity } from "react-native";
+import { Text, View, Image, TouchableOpacity } from "react-native";
 import moment from "moment";
 
 import { Refresh, TransactionItem, FilterList } from "../components";
@@ -14,7 +14,24 @@ import { globals, transactionStyle } from "../styles";
 const Transaction = ({ navigation }) => {
   const [collapse, setCollapse] = useState(false);
   const [transactions, setTransactions] = useState([]);
-  const [filter, setFilter] = useState([]);
+  const [list, setList] = useState([
+    {
+      id: 0,
+      label: "Today",
+      checked: true,
+    },
+    {
+      id: 1,
+      label: "Week",
+      checked: false,
+    },
+    {
+      id: 2,
+      label: "Month",
+      checked: false,
+    },
+  ]);
+  const [filterTransaction, setFilterTransaction] = useState([]);
 
   const { user } = useUserContext();
   const filterDate = useFilterDate();
@@ -31,6 +48,17 @@ const Transaction = ({ navigation }) => {
       .then(res => res.data)
       .catch(() => false);
   };
+
+  const onList = id =>
+    setList(prev =>
+      prev.map(data => {
+        if (data.id == id) {
+          return { ...data, checked: true };
+        } else {
+          return { ...data, checked: false };
+        }
+      })
+    );
 
   useEffect(() => {
     const header = async () => {
@@ -61,12 +89,23 @@ const Transaction = ({ navigation }) => {
     fetch();
   }, [user.refresh]);
 
+  useEffect(() => {
+    list.map(({ checked, id }) => {
+      const filtered = filterDate(transactions);
+      if (checked) {
+        id == 0 && setFilterTransaction(filtered.today);
+        id == 1 && setFilterTransaction(filtered.week);
+        id == 2 && setFilterTransaction(filtered.month);
+      }
+    });
+  }, [list]);
+
   return (
     <View style={[globals.container]}>
       <Refresh>
         <View style={{ paddingBottom: 24 }}>
-          {transactions &&
-            transactions.map(({ sender, amount, created_at }, i) => {
+          {filterTransaction.length > 0 &&
+            filterTransaction.map(({ sender, amount, created_at }, i) => {
               return (
                 <View style={transactionStyle.transactionItemWrap} key={i}>
                   <TransactionItem
@@ -82,9 +121,24 @@ const Transaction = ({ navigation }) => {
             })}
         </View>
       </Refresh>
+      {filterTransaction.length === 0 && (
+        <Text
+          style={{
+            flex: 1,
+            textAlign: "center",
+            fontWeight: "500",
+            color: "rgba(132, 132, 132, 1)",
+          }}
+        >
+          No transactions history
+        </Text>
+      )}
       {collapse && (
         <FilterList
           onCollapse={onCollapse}
+          list={list}
+          onList={onList}
+          document={filterTransaction}
           filterState={state => setFilter(state)}
         />
       )}
