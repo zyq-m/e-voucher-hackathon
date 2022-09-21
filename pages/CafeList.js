@@ -36,8 +36,7 @@ const CafeList = ({ navigation, route }) => {
           sender: user.id,
           amount: amount,
         })
-          .then(res => {
-            console.log(res);
+          .then(() => {
             alert("Payment successful👍");
             navigation.navigate("Student Dashboard");
           })
