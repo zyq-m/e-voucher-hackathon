@@ -40,18 +40,6 @@ const QRScan = ({ navigation, route }) => {
       amount: amount,
     };
 
-    // try {
-
-    //   if (cafeId) {
-    //     const response = await setTransactions(cafeId, token, bodyData);
-    //     response && navigate();
-    //   } else {
-    //     alert("Invalid");
-    //   }
-    // } catch (error) {
-    //   alert("Error occur");
-    // }
-
     if (cafeId) {
       const token = await getValueFor("accessToken");
       setTransactions(cafeId, token, bodyData)
@@ -72,7 +60,7 @@ const QRScan = ({ navigation, route }) => {
   }, []);
 
   return (
-    <View style={globals.container}>
+    <View style={[globals.container, { paddingHorizontal: 16 }]}>
       <BarCodeScanner
         onBarCodeScanned={scanned ? undefined : handleQRScan}
         style={QRScanStyle.barcode}
