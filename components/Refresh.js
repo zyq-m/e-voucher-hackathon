@@ -23,6 +23,7 @@ const Refresh = ({ children }) => {
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
+      style={{ paddingHorizontal: 16 }}
     >
       {children}
     </ScrollView>

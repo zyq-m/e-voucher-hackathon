@@ -1,42 +1,21 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { View, Image, Text, TouchableOpacity } from "react-native";
+import { printToFileAsync } from "expo-print";
+import { shareAsync } from "expo-sharing";
 
 import Button from "./Button";
+import FilterItem from "./FilterItem";
+import DocumentTemplate from "./DocumentTemplate";
 
 import filterStyle from "../styles/filterStyle";
 
-const FilterList = ({ onCollapse, filterState }) => {
-  const [checked, setChecked] = useState({
-    today: true,
-    week: false,
-    month: false,
-  });
-
-  const onChecked = item => {
-    if (item === "today") {
-      setChecked({
-        today: true,
-        week: false,
-        month: false,
-      });
-    }
-    if (item === "week") {
-      setChecked({
-        today: false,
-        week: true,
-        month: false,
-      });
-    }
-    if (item === "month") {
-      setChecked({
-        today: false,
-        week: false,
-        month: true,
-      });
-    }
+const FilterList = ({ onCollapse, list, onList, document }) => {
+  const generatePDF = async () => {
+    const { uri } = await printToFileAsync({
+      html: DocumentTemplate(document),
+    });
+    await shareAsync(uri, { UTI: ".pdf", mimeType: "application/pdf" });
   };
-
-  useEffect(() => filterState(checked), [checked]);
 
   return (
     <View style={filterStyle.fitlerBackDrop}>
@@ -51,56 +30,20 @@ const FilterList = ({ onCollapse, filterState }) => {
           <Text style={filterStyle.filterHeader}>Sort by</Text>
         </View>
         <View style={{ marginTop: 10 }}>
-          <FilterItem
-            label={"Today"}
-            active={checked.today}
-            onActive={() => onChecked("today")}
-          />
-          <FilterItem
-            label={"Week"}
-            active={checked.week}
-            onActive={() => onChecked("week")}
-          />
-          <FilterItem
-            label={"Month"}
-            active={checked.month}
-            onActive={() => onChecked("month")}
-          />
+          {list.map(({ id, label, checked }) => (
+            <FilterItem
+              key={id}
+              label={label}
+              active={checked}
+              onActive={() => onList(id)}
+            />
+          ))}
         </View>
         <View style={{ marginVertical: 20 }}>
-          <Button label={"Print"} />
+          <Button label={"Print"} onPress={generatePDF} />
         </View>
       </View>
     </View>
-  );
-};
-
-const FilterItem = ({ label, active, onActive }) => {
-  return (
-    <TouchableOpacity onPress={onActive}>
-      <View
-        style={[
-          filterStyle.filterRow,
-          filterStyle.filterItemSpace,
-          { justifyContent: "space-between" },
-        ]}
-      >
-        <View style={[filterStyle.filterRow]}>
-          <Image
-            style={filterStyle.calenderIcon}
-            source={require("../assets/icons/calender-icon.png")}
-          />
-          <Text style={filterStyle.filterItemTxt}>{label}</Text>
-        </View>
-
-        {active && (
-          <Image
-            style={filterStyle.checkedIcon}
-            source={require("../assets/icons/checked-icon.png")}
-          />
-        )}
-      </View>
-    </TouchableOpacity>
   );
 };
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
+import moment from "moment";
 
 import {
   Profile,
@@ -10,14 +11,13 @@ import {
 } from "../components";
 
 import instanceAxios from "../lib/instanceAxios";
-import { useTime, useUserContext } from "../hooks";
+import { useUserContext } from "../hooks";
 import { getValueFor, deleteItem } from "../utils/SecureStore";
 
 import { globals, dashboardStyle } from "../styles";
 
 const CafeDashboard = ({ navigation }) => {
   const { user, setUser } = useUserContext();
-  const format = useTime();
   const [userData, setUserData] = useState({});
   const [transactions, setTransactions] = useState([]);
   const [total, setTotal] = useState(0);
@@ -101,16 +101,14 @@ const CafeDashboard = ({ navigation }) => {
           </View>
           <TransactionContainer>
             {transactions &&
-              transactions.map((data, i) => {
-                const formater = format(data.created_at);
-
+              transactions.map(({ sender, created_at, amount }, i) => {
                 return (
                   <TransactionItem
                     key={i}
-                    field1={data.sender}
-                    time={formater.time}
-                    date={formater.date}
-                    amount={data.amount}
+                    field1={sender}
+                    time={moment(created_at).format("h.mma")}
+                    date={moment(created_at).format("D-MM")}
+                    amount={amount}
                     noBorder={i == 0 && true}
                     cafe={true}
                   />

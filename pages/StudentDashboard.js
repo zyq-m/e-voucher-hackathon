@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
+import moment from "moment";
 
 import instanceAxios from "../lib/instanceAxios";
-import { useTime, useUserContext } from "../hooks";
+import { useUserContext } from "../hooks";
 import { getValueFor, deleteItem } from "../utils/SecureStore";
 
 import {
@@ -18,7 +19,6 @@ import { globals, dashboardStyle } from "../styles";
 
 const StudentDashboard = ({ navigation }) => {
   const { user, setUser } = useUserContext();
-  const format = useTime();
   const [userData, setUserData] = useState({
     student_name: "",
     matric_no: "",
@@ -48,7 +48,6 @@ const StudentDashboard = ({ navigation }) => {
 
   useEffect(() => {
     getValueFor("accessToken").then(res => fetchUser(user.id, res));
-    console.log(user);
   }, [user.refresh]);
 
   return (
@@ -99,16 +98,14 @@ const StudentDashboard = ({ navigation }) => {
           </View>
           <TransactionContainer>
             {transactionData &&
-              transactionData.map((data, i) => {
-                const formater = format(data.created_at);
-
+              transactionData.map(({ sender, amount, created_at }, i) => {
                 return (
                   <TransactionItem
                     key={i}
-                    field1={data.sender}
-                    time={formater.time}
-                    date={formater.date}
-                    amount={data.amount}
+                    field1={sender}
+                    time={moment(created_at).format("h.mma")}
+                    date={moment(created_at).format("D-MM")}
+                    amount={amount}
                     noBorder={i == 0 && true}
                   />
                 );

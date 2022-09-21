@@ -53,7 +53,12 @@ const Login = ({ navigation }) => {
   };
 
   return (
-    <View style={[globals.container, { justifyContent: "center" }]}>
+    <View
+      style={[
+        globals.container,
+        { justifyContent: "center", paddingHorizontal: 16 },
+      ]}
+    >
       <View>
         <Image
           style={loginStyle.logo}

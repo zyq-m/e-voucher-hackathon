@@ -1,32 +1,31 @@
-import { useTime } from "../hooks";
+import moment from "moment";
 
 export const useFilterDate = () => {
-  const format = useTime();
-  const currentDate = new Date();
+  const currentDate = moment();
+  const dateFormat = "D-MM-YY";
 
   const filterDate = arr => {
-    console.log(arr);
     // filter by current day
     const today = arr.filter(data => {
-      const date = new Date(format(data.created_at).date);
+      const date = moment(data.created_at).format(dateFormat);
 
-      return date.getDate() == currentDate.getDate();
+      return date == currentDate.format(dateFormat);
     });
 
-    // filter by week
+    // filter by current week
     const currentWeek = arr.filter(data => {
-      const firstDay = currentDate.getDate() - currentDate.getDay();
-      const lastDay = firstDay + 6;
-      const date = new Date(format(data.created_at).date);
+      const firstDay = currentDate.startOf("week").day("Thursday").date();
+      const lastDay = currentDate.endOf("week").day("Friday").date();
+      const date = moment(data.created_at).date();
 
-      return date.getDate() >= firstDay && date.getDate() <= lastDay;
+      return date >= firstDay && date <= lastDay;
     });
 
     // filter by current month
     const currentMonth = arr.filter(data => {
-      const date = new Date(format(data.created_at).date);
+      const date = moment(data.created_at).month();
 
-      return date.getMonth() == currentDate.getMonth();
+      return date == currentDate.month();
     });
 
     return {
