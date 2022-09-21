@@ -53,7 +53,7 @@ const PayNow = ({ navigation }) => {
   }, []);
 
   return (
-    <View style={[globals.container]}>
+    <View style={[globals.container, { paddingHorizontal: 16 }]}>
       <View style={{ flex: 1, justifyContent: "center" }}>
         <Text style={[payNowStyle.textCenter, payNowStyle.payHeader]}>
           Choose your amount
