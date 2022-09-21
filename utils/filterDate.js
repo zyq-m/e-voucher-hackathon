@@ -1,7 +1,7 @@
 import moment from "moment";
 
 export const useFilterDate = () => {
-  const currentDate = moment().month(7);
+  const currentDate = moment();
   const dateFormat = "D-MM-YY";
 
   const filterDate = arr => {
