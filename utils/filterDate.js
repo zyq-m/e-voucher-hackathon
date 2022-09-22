@@ -14,8 +14,8 @@ export const useFilterDate = () => {
 
     // filter by current week
     const currentWeek = arr.filter(data => {
-      const firstDay = currentDate.startOf("week").day("Thursday").date();
-      const lastDay = currentDate.endOf("week").day("Friday").date();
+      const firstDay = currentDate.startOf("week").date();
+      const lastDay = currentDate.endOf("week").date();
       const date = moment(data.created_at).date();
 
       return date >= firstDay && date <= lastDay;
