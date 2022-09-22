@@ -31,7 +31,7 @@ const PayNow = ({ navigation }) => {
       amount = 2;
     }
 
-    transactionDate.length <= 3
+    transactionDate.length < 3
       ? navigation.navigate("QR Scan", { amount: amount })
       : alert("You only can make 3 transactions per day");
   };

@@ -36,8 +36,7 @@ const CafeList = ({ navigation, route }) => {
           sender: user.id,
           amount: amount,
         })
-          .then(res => {
-            console.log(res);
+          .then(() => {
             alert("Payment successful👍");
             navigation.navigate("Student Dashboard");
           })
@@ -67,7 +66,7 @@ const CafeList = ({ navigation, route }) => {
   }, []);
 
   return (
-    <View style={[globals.container]}>
+    <View style={[globals.container, { paddingHorizontal: 16 }]}>
       <View style={{ flex: 1, justifyContent: "center" }}>
         <Text style={[payNowStyle.textCenter, payNowStyle.payHeader]}>
           Choose cafe
