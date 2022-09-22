@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import CafeDashboard from "../pages/CafeDashboard";
 import Transaction from "../pages/Transaction";
+import MyQRCode from "../pages/MyQRCode";
 
 const Stack = createNativeStackNavigator();
 
@@ -15,6 +16,13 @@ const CafeNav = () => {
       <Stack.Screen
         name="Transactions"
         component={Transaction}
+        options={{
+          headerTitleAlign: "center",
+        }}
+      />
+      <Stack.Screen
+        name="My QRCode"
+        component={MyQRCode}
         options={{
           headerTitleAlign: "center",
         }}
