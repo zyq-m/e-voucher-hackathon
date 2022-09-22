@@ -93,12 +93,12 @@ const Transaction = ({ navigation }) => {
     list.map(({ checked, id }) => {
       const filtered = filterDate(transactions);
       if (checked) {
-        id == 0 && setFilterTransaction(filtered.today);
-        id == 1 && setFilterTransaction(filtered.week);
-        id == 2 && setFilterTransaction(filtered.month);
+        id === 0 && setFilterTransaction(filtered.today);
+        id === 1 && setFilterTransaction(filtered.week);
+        id === 2 && setFilterTransaction(filtered.month);
       }
     });
-  }, [list]);
+  }, [list, transactions]);
 
   return (
     <View style={[globals.container]}>
