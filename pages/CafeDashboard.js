@@ -8,6 +8,7 @@ import {
   TransactionContainer,
   TransactionItem,
   Refresh,
+  Button,
 } from "../components";
 
 import instanceAxios from "../lib/instanceAxios";
@@ -84,6 +85,9 @@ const CafeDashboard = ({ navigation }) => {
         </View>
         <View style={{ marginTop: 24 }}>
           <Amount amount={total} student={false} />
+        </View>
+        <View style={{ marginTop: 20 }}>
+          <Button label={"My QRCode"} onPress={() => navigation.navigate("My QRCode")} />
         </View>
         <View style={{ marginTop: 40, marginBottom: 24 }}>
           <View style={[dashboardStyle.transactionHeaderWrap]}>
