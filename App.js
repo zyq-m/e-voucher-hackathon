@@ -28,16 +28,17 @@ export default function App() {
         >
           {user.login ? (
             <>
-              user.student ? (
-              <Stack.Screen name="Student" component={Student} />
+              {user.student ? (
+                <Stack.Screen name="Student" component={Student} />
               ) : (
-              <Stack.Screen name="Cafe" component={Cafe} />
-              )
+                <Stack.Screen name="Cafe" component={Cafe} />
+              )}
               <Stack.Screen
                 name="Transactions"
                 component={Transaction}
                 options={{
                   headerTitleAlign: "center",
+                  headerShown: true
                 }}
               />
             </>
