@@ -40,13 +40,15 @@ const Transaction = ({ navigation }) => {
 
   const getTransactions = (id, token) => {
     return instanceAxios
-      .get(`/api/transactions/cafe/${id}`, {
+      .get(`/api/transactions/${user.student ? `students` : `cafe`}/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then(res => res.data)
-      .catch(() => false);
+      .catch((err) => {
+        return false
+      });
   };
 
   const onList = id =>
