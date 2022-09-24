@@ -102,7 +102,15 @@ const StudentDashboard = ({ navigation }) => {
           </View>
           <TransactionContainer>
             {transactionData &&
-              transactionData.slice(0, 3).map(({ sender, amount, created_at }, i) => {
+              transactionData.slice(0, 3).map(({ sender, amount, created_at, transaction_id, cafe_name, student_name }, i) => {
+                let details = {
+                  sender: `${student_name} (${sender})`,
+                  recipient: cafe_name,
+                  transactionId: transaction_id,
+                  amount: `RM${amount}`,
+                  date: `${moment(created_at).format("D-MM-YYYY")} at ${moment(created_at).format("h.mma")}`
+                }
+
                 return (
                   <TransactionItem
                     key={i}
@@ -111,6 +119,7 @@ const StudentDashboard = ({ navigation }) => {
                     date={moment(created_at).format("D-MM")}
                     amount={amount}
                     noBorder={i == 0 && true}
+                    navigate={() => navigation.navigate("Transaction Details", { data: details })}
                   />
                 );
               })}

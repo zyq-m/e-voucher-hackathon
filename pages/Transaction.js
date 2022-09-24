@@ -113,7 +113,15 @@ const Transaction = ({ navigation }) => {
       <Refresh>
         <View style={{ paddingBottom: 24 }}>
           {filterTransaction?.length > 0 &&
-            filterTransaction.map(({ sender, amount, created_at }, i) => {
+            filterTransaction.map(({ sender, amount, created_at, transaction_id, cafe_name, student_name }, i) => {
+              let details = {
+                sender: `${student_name} (${sender})`,
+                recipient: cafe_name,
+                transactionId: transaction_id,
+                amount: `RM${amount}`,
+                date: `${moment(created_at).format("D-MM-YYYY")} at ${moment(created_at).format("h.mma")}`
+              }
+
               return (
                 <View style={transactionStyle.transactionItemWrap} key={i}>
                   <TransactionItem
@@ -121,8 +129,9 @@ const Transaction = ({ navigation }) => {
                     time={moment(created_at).format("h.mma")}
                     date={moment(created_at).format("D-MM")}
                     amount={amount}
-                    cafe={true}
+                    cafe={!user.student}
                     noBorder={true}
+                    navigate={() => navigation.navigate("Transaction Details", { data: details })}
                   />
                 </View>
               );

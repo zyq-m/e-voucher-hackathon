@@ -105,7 +105,15 @@ const CafeDashboard = ({ navigation }) => {
           </View>
           <TransactionContainer>
             {transactions &&
-              transactions.slice(0, 3).map(({ sender, created_at, amount }, i) => {
+              transactions.slice(0, 3).map(({ sender, amount, created_at, transaction_id, cafe_name, student_name }, i) => {
+                let details = {
+                  sender: `${student_name} (${sender})`,
+                  recipient: cafe_name,
+                  transactionId: transaction_id,
+                  amount: `RM${amount}`,
+                  date: `${moment(created_at).format("D-MM-YYYY")} at ${moment(created_at).format("h.mma")}`
+                }
+
                 return (
                   <TransactionItem
                     key={i}
@@ -115,6 +123,7 @@ const CafeDashboard = ({ navigation }) => {
                     amount={amount}
                     noBorder={i == 0 && true}
                     cafe={true}
+                    navigate={() => navigation.navigate("Transaction Details", { data: details })}
                   />
                 );
               })}
