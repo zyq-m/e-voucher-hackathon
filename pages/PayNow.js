@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Platform } from "react-native";
 
 import { Button } from "../components";
 import { getStudentTransactions } from "../lib/API";
@@ -31,9 +31,15 @@ const PayNow = ({ navigation }) => {
       amount = 2;
     }
 
-    transactionDate.length < 3
-      ? navigation.navigate("QR Scan", { amount: amount })
-      : alert("You only can make 3 transactions per day");
+    if (transactionDate.length < 3) {
+      if (Platform.OS === 'web') {
+        navigation.navigate("Cafe List", { amount: amount })
+      } else {
+        navigation.navigate("QR Scan", { amount: amount })
+      }
+    } else {
+      alert("You only can make 3 transactions per day");
+    }
   };
 
   useEffect(() => {
