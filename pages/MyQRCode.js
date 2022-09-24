@@ -9,7 +9,7 @@ import { globals } from '../styles'
 
 const MyQRCode = () => {
   const { user } = useUserContext()
-  const [cafeName, setCafeName] = useState('')
+  const [cafeName, setCafeName] = useState(undefined)
 
   useEffect(() => {
     getValueFor('accessToken').then(token => {
@@ -26,14 +26,19 @@ const MyQRCode = () => {
 
   return (
     <View style={[globals.container, { paddingHorizontal: 16, justifyContent: "center", alignItems: "center" }]}>
-      <View style={QRStyles.QRWrapper}>
-        <QRCode
-          size={300}
-          value={`https://e-voucher-api.herokuapp.com/api/${user.id}`}
-          style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-        />
-      </View>
-      <Text style={QRStyles.cafeName}>{cafeName}</Text>
+      {cafeName && (
+        <>
+          <View style={QRStyles.QRWrapper}>
+            <QRCode
+              size={300}
+              value={`https://e-voucher-api.herokuapp.com/api/${user.id}`}
+              style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+            />
+          </View>
+          <Text style={QRStyles.cafeName}>{cafeName}</Text>
+        </>
+      )
+      }
     </View>
   )
 }
