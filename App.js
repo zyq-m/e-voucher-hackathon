@@ -4,6 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Login from "./pages/Login";
+import Transaction from "./pages/Transaction";
 import { StudentNav as Student, CafeNav as Cafe } from "./navigators";
 
 import { UserContext } from "./lib/Context";
@@ -26,11 +27,20 @@ export default function App() {
           screenOptions={{ headerShown: false }}
         >
           {user.login ? (
-            user.student ? (
+            <>
+              user.student ? (
               <Stack.Screen name="Student" component={Student} />
-            ) : (
+              ) : (
               <Stack.Screen name="Cafe" component={Cafe} />
-            )
+              )
+              <Stack.Screen
+                name="Transactions"
+                component={Transaction}
+                options={{
+                  headerTitleAlign: "center",
+                }}
+              />
+            </>
           ) : (
             <Stack.Screen name="login" component={Login} />
           )}

@@ -3,6 +3,7 @@ import PayNow from "../pages/PayNow";
 import QRScan from "../pages/QRScan";
 import CafeList from "../pages/CafeList";
 import StudentDashboard from "../pages/StudentDashboard";
+import Transaction from "../pages/Transaction";
 
 const Stack = createNativeStackNavigator();
 
