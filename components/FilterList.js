@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { View, Image, Text, TouchableOpacity } from "react-native";
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
@@ -18,12 +17,12 @@ const FilterList = ({ onCollapse, list, onList, document }) => {
   };
 
   return (
-    <View style={filterStyle.fitlerBackDrop}>
+    <TouchableOpacity activeOpacity={0} style={filterStyle.fitlerBackDrop} onPress={onCollapse}>
       <View style={filterStyle.filterContainer}>
-        <View style={filterStyle.filterRow}>
+        <View style={[filterStyle.filterRow, { paddingTop: 10 }]}>
           <TouchableOpacity onPress={onCollapse}>
             <Image
-              style={{ width: 12, height: 12 }}
+              style={{ width: 15, height: 15 }}
               source={require("../assets/icons/close-icon.png")}
             />
           </TouchableOpacity>
@@ -43,7 +42,7 @@ const FilterList = ({ onCollapse, list, onList, document }) => {
           <Button label={"Print"} onPress={generatePDF} />
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
