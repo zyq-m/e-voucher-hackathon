@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Login from "./pages/Login";
 import Transaction from "./pages/Transaction";
+import TransactionDetail from "./pages/TransactionDetail";
 import { StudentNav as Student, CafeNav as Cafe } from "./navigators";
 
 import { UserContext } from "./lib/Context";
@@ -36,6 +37,14 @@ export default function App() {
               <Stack.Screen
                 name="Transactions"
                 component={Transaction}
+                options={{
+                  headerTitleAlign: "center",
+                  headerShown: true
+                }}
+              />
+              <Stack.Screen
+                name="Transaction Details"
+                component={TransactionDetail}
                 options={{
                   headerTitleAlign: "center",
                   headerShown: true
