@@ -91,10 +91,14 @@ const StudentDashboard = ({ navigation }) => {
             <Text style={dashboardStyle.transactionHeader}>
               Recent transaction
             </Text>
-            <Image
-              style={{ width: 25, height: 25 }}
-              source={require("../assets/icons/more-icon.png")}
-            />
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Transactions")}
+            >
+              <Image
+                style={{ width: 25, height: 25 }}
+                source={require("../assets/icons/more-icon.png")}
+              />
+            </TouchableOpacity>
           </View>
           <TransactionContainer>
             {transactionData &&
