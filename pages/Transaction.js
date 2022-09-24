@@ -17,16 +17,21 @@ const Transaction = ({ navigation }) => {
   const [list, setList] = useState([
     {
       id: 0,
-      label: "Today",
+      label: "All",
       checked: true,
     },
     {
       id: 1,
-      label: "Week",
+      label: "Today",
       checked: false,
     },
     {
       id: 2,
+      label: "Week",
+      checked: false,
+    },
+    {
+      id: 3,
       label: "Month",
       checked: false,
     },
@@ -95,9 +100,10 @@ const Transaction = ({ navigation }) => {
     list.map(({ checked, id }) => {
       const filtered = filterDate(transactions);
       if (checked) {
-        id === 0 && setFilterTransaction(filtered.today);
-        id === 1 && setFilterTransaction(filtered.week);
-        id === 2 && setFilterTransaction(filtered.month);
+        id === 0 && setFilterTransaction(filtered.getAll);
+        id === 1 && setFilterTransaction(filtered.getToday);
+        id === 2 && setFilterTransaction(filtered.getWeek);
+        id === 3 && setFilterTransaction(filtered.getMonth);
       }
     });
   }, [list, transactions]);
@@ -106,7 +112,7 @@ const Transaction = ({ navigation }) => {
     <View style={[globals.container]}>
       <Refresh>
         <View style={{ paddingBottom: 24 }}>
-          {filterTransaction.length > 0 &&
+          {filterTransaction?.length > 0 &&
             filterTransaction.map(({ sender, amount, created_at }, i) => {
               return (
                 <View style={transactionStyle.transactionItemWrap} key={i}>
