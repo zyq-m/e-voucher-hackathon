@@ -102,7 +102,7 @@ const StudentDashboard = ({ navigation }) => {
           </View>
           <TransactionContainer>
             {transactionData &&
-              transactionData.map(({ sender, amount, created_at }, i) => {
+              transactionData.slice(0, 3).map(({ sender, amount, created_at }, i) => {
                 return (
                   <TransactionItem
                     key={i}

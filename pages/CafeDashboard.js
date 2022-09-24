@@ -105,7 +105,7 @@ const CafeDashboard = ({ navigation }) => {
           </View>
           <TransactionContainer>
             {transactions &&
-              transactions.map(({ sender, created_at, amount }, i) => {
+              transactions.slice(0, 3).map(({ sender, created_at, amount }, i) => {
                 return (
                   <TransactionItem
                     key={i}
