@@ -9,14 +9,14 @@ export const useFilterDate = () => {
     const today = arr.filter(data => {
       const date = moment(data.created_at).format(dateFormat);
 
-      return date == currentDate.format(dateFormat);
+      return date === currentDate.format(dateFormat);
     });
 
     // filter by current week
     const currentWeek = arr.filter(data => {
-      const firstDay = currentDate.startOf("week").date();
-      const lastDay = currentDate.endOf("week").date();
-      const date = moment(data.created_at).date();
+      const firstDay = currentDate.startOf("week").dayOfYear()
+      const lastDay = currentDate.endOf("week").dayOfYear()
+      const date = moment(data.created_at).dayOfYear()
 
       return date >= firstDay && date <= lastDay;
     });
@@ -25,7 +25,7 @@ export const useFilterDate = () => {
     const currentMonth = arr.filter(data => {
       const date = moment(data.created_at).month();
 
-      return date == currentDate.month();
+      return date === currentDate.month() - 1;
     });
 
     return {
