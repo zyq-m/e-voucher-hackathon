@@ -30,7 +30,7 @@ const QRScan = ({ navigation, route }) => {
 
   const navigate = () => {
     setScanned(true);
-    navigation.navigate("Student Dashboard");
+    navigation.navigate("Dashboard");
   };
 
   const handleQRScan = async ({ data }) => {
