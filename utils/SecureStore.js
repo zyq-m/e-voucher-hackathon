@@ -5,7 +5,6 @@ export const save = async (key, value) => {
   if (Platform.OS === 'web') {
     return localStorage.setItem(key, value)
   } else {
-
     await SecureStore.setItemAsync(key, value);
   }
 }
