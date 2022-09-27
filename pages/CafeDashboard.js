@@ -11,60 +11,40 @@ import {
   Button,
 } from "../components";
 
-import instanceAxios from "../lib/instanceAxios";
 import { useUserContext } from "../hooks";
-import { getValueFor, deleteItem } from "../utils/SecureStore";
+import { deleteItem } from "../utils/SecureStore";
+import { useCafe } from "../hooks/useCafe";
+import { useTransaction } from "../hooks/useTransaction";
 
 import { globals, dashboardStyle } from "../styles";
 
 const CafeDashboard = ({ navigation }) => {
   const { user, setUser } = useUserContext();
-  const [userData, setUserData] = useState({});
-  const [transactions, setTransactions] = useState([]);
   const [total, setTotal] = useState(0);
+  const { cafe } = useCafe({ id: user.id })
+  const { transactions } = useTransaction({ id: user.id, refresh: user.refresh })
 
-  const getTransactions = (id, token) => {
-    instanceAxios
-      .get(`/api/cafe/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then(res => setUserData(res.data[0]))
-      .catch(err => console.error(err));
+  const countTotal = () => {
+    let temp = 0
+    transactions.forEach(({ amount }) => {
+      temp += parseInt(amount)
+    });
 
-    instanceAxios
-      .get(`/api/transactions/cafe/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then(res => {
-        let total = 0;
-
-        setTransactions(res.data);
-        res.data.map(data => {
-          total += parseInt(data.amount);
-        });
-        setTotal(total);
-      })
-      .catch(err => console.error(err));
-  };
+    setTotal(temp)
+  }
 
   useEffect(() => {
-    getValueFor("accessToken").then(token => getTransactions(user.id, token));
-  }, [user.refresh]);
+    transactions && countTotal()
+  }, [transactions])
 
   return (
     <View style={[globals.container, { paddingTop: 48 }]}>
       <Refresh>
         <View style={dashboardStyle.logoutContainer}>
-          {userData && (
-            <Profile
-              textField1={userData.cafe_name}
-              textField2={userData.username}
-            />
-          )}
+          <Profile
+            textField1={cafe[0]?.cafe_name}
+            textField2={cafe[0]?.username}
+          />
           <TouchableOpacity
             onPress={async () => {
               await deleteItem("accessToken");
