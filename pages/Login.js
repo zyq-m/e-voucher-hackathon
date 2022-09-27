@@ -15,12 +15,13 @@ const Login = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const { setUser } = useUserContext();
 
-  const authUser = (id, student) => {
+  const authUser = ({ id, student, cafe }) => {
     setUser(prev => ({
       ...prev,
       id: id,
       login: true,
-      student: student,
+      student: student || false,
+      cafe: cafe || false
     }));
   };
 
@@ -32,8 +33,8 @@ const Login = ({ navigation }) => {
       });
 
       if (res) {
-        authUser(cafeAcc, false);
-        navigation.navigate("Cafe", { screen: "Cafe Dashboard" });
+        authUser({ id: cafeAcc, cafe: true });
+        navigation.navigate("Dashboard");
       } else {
         alert("Invalid username or password");
       }
@@ -44,8 +45,8 @@ const Login = ({ navigation }) => {
       });
 
       if (res) {
-        authUser(studentAcc, true);
-        navigation.navigate("Student", { screen: "Student Dashboard" });
+        authUser({ id: studentAcc, student: true });
+        navigation.navigate("Dashboard");
       } else {
         alert("Invalid matric no or password");
       }
