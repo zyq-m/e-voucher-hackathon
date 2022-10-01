@@ -1,5 +1,5 @@
-import { View, Image, Text, TouchableOpacity } from "react-native";
-import { printToFileAsync } from "expo-print";
+import { View, Image, Text, TouchableOpacity, Platform } from "react-native";
+import { printToFileAsync, printAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
 
 import Button from "./Button";
@@ -11,11 +11,21 @@ import filterStyle from "../styles/filterStyle";
 
 const FilterList = ({ onCollapse, list, onList, document }) => {
   const { user } = useUserContext()
+
   const generatePDF = async () => {
-    const { uri } = await printToFileAsync({
-      html: DocumentTemplate(document),
-    });
-    await shareAsync(uri, { UTI: ".pdf", mimeType: "application/pdf" });
+    // On iOS/android prints the given html. On web prints the HTML from the current page.
+    try {
+      if (Platform.OS === 'web') {
+        await printAsync({ html: DocumentTemplate(document) })
+      } else {
+        const { uri } = await printToFileAsync({
+          html: DocumentTemplate(document),
+        });
+        await shareAsync(uri, { UTI: ".pdf", mimeType: "application/pdf" });
+      }
+    } catch (error) {
+      console.warn(error)
+    }
   };
 
   return (
