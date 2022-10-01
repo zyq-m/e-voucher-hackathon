@@ -3,9 +3,9 @@ import { View, Image } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 
 import { Button } from "../components";
-import { setTransactions } from "../lib/API/setTransaction";
-import { getValueFor } from "../utils/SecureStore";
+import { setTransactions } from "../lib/API";
 import { useUserContext } from "../hooks";
+import { checkURL } from "../utils/checkURL";
 
 import { globals, QRScanStyle } from "../styles";
 
@@ -22,15 +22,9 @@ const QRScan = ({ navigation, route }) => {
     }
   };
 
-  const checkURL = url => {
-    const arrURL = url.split("api/");
-    if (arrURL.length == 2) return arrURL[1];
-    else false;
-  };
-
   const navigate = () => {
     setScanned(true);
-    navigation.navigate("Student Dashboard");
+    navigation.navigate("Dashboard");
   };
 
   const handleQRScan = async ({ data }) => {
@@ -41,8 +35,7 @@ const QRScan = ({ navigation, route }) => {
     };
 
     if (cafeId) {
-      const token = await getValueFor("accessToken");
-      setTransactions(cafeId, token, bodyData)
+      setTransactions({ id: cafeId, data: bodyData })
         .then(() => {
           alert("Payment successful👍");
           navigate();

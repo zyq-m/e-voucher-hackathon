@@ -11,60 +11,43 @@ import {
   Button,
 } from "../components";
 
-import instanceAxios from "../lib/instanceAxios";
 import { useUserContext } from "../hooks";
-import { getValueFor, deleteItem } from "../utils/SecureStore";
-
+import { deleteItem } from "../utils/SecureStore";
+import { useCafe, useStudent, useTransaction } from "../hooks";
 import { globals, dashboardStyle } from "../styles";
 
-const CafeDashboard = ({ navigation }) => {
+const Dashboard = ({ navigation }) => {
   const { user, setUser } = useUserContext();
-  const [userData, setUserData] = useState({});
-  const [transactions, setTransactions] = useState([]);
   const [total, setTotal] = useState(0);
+  const { cafe } = useCafe({ id: user.id, student: user.student })
+  const { students } = useStudent({ id: user.id, student: user.student, refresh: user.refresh })
+  const { transactions } = useTransaction({ id: user.id, refresh: user.refresh, student: user.student })
 
-  const getTransactions = (id, token) => {
-    instanceAxios
-      .get(`/api/cafe/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then(res => setUserData(res.data[0]))
-      .catch(err => console.error(err));
+  const countTotal = () => {
+    let temp = 0
+    transactions.forEach(({ amount }) => {
+      temp += parseInt(amount)
+    });
 
-    instanceAxios
-      .get(`/api/transactions/cafe/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then(res => {
-        let total = 0;
+    setTotal(temp)
+  }
 
-        setTransactions(res.data);
-        res.data.map(data => {
-          total += parseInt(data.amount);
-        });
-        setTotal(total);
-      })
-      .catch(err => console.error(err));
-  };
+  const onNavigate = () => {
+    user.student ? navigation.navigate("Pay") : navigation.navigate("My QRCode")
+  }
 
   useEffect(() => {
-    getValueFor("accessToken").then(token => getTransactions(user.id, token));
-  }, [user.refresh]);
+    transactions && countTotal()
+  }, [transactions])
 
   return (
     <View style={[globals.container, { paddingTop: 48 }]}>
       <Refresh>
         <View style={dashboardStyle.logoutContainer}>
-          {userData && (
-            <Profile
-              textField1={userData.cafe_name}
-              textField2={userData.username}
-            />
-          )}
+          <Profile
+            textField1={cafe[0]?.cafe_name || students[0]?.student_name}
+            textField2={cafe[0]?.username || students[0]?.matric_no}
+          />
           <TouchableOpacity
             onPress={async () => {
               await deleteItem("accessToken");
@@ -84,10 +67,10 @@ const CafeDashboard = ({ navigation }) => {
           </TouchableOpacity>
         </View>
         <View style={{ marginTop: 24 }}>
-          <Amount amount={total} student={false} />
+          <Amount amount={user.student ? students[0]?.wallet_amount : total} student={user.student} />
         </View>
         <View style={{ marginTop: 20 }}>
-          <Button label={"My QRCode"} onPress={() => navigation.navigate("My QRCode")} />
+          <Button label={user.student ? "Pay" : "My QRCode"} onPress={onNavigate} />
         </View>
         <View style={{ marginTop: 40, marginBottom: 24 }}>
           <View style={[dashboardStyle.transactionHeaderWrap]}>
@@ -105,7 +88,15 @@ const CafeDashboard = ({ navigation }) => {
           </View>
           <TransactionContainer>
             {transactions &&
-              transactions.map(({ sender, created_at, amount }, i) => {
+              transactions.slice(0, 3).map(({ sender, amount, created_at, transaction_id, cafe_name, student_name }, i) => {
+                let details = {
+                  sender: `${student_name} (${sender})`,
+                  recipient: cafe_name,
+                  transactionId: transaction_id,
+                  amount: `RM${amount}`,
+                  date: `${moment(created_at).format("D-MM-YYYY")} at ${moment(created_at).format("h.mma")}`
+                }
+
                 return (
                   <TransactionItem
                     key={i}
@@ -114,7 +105,8 @@ const CafeDashboard = ({ navigation }) => {
                     date={moment(created_at).format("D-MM")}
                     amount={amount}
                     noBorder={i == 0 && true}
-                    cafe={true}
+                    cafe={!user.student}
+                    navigate={() => navigation.navigate("Transaction Details", { data: details })}
                   />
                 );
               })}
@@ -125,4 +117,4 @@ const CafeDashboard = ({ navigation }) => {
   );
 };
 
-export default CafeDashboard;
+export default Dashboard;

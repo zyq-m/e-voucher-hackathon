@@ -4,50 +4,22 @@ import moment from "moment";
 
 import { Refresh, TransactionItem, FilterList } from "../components";
 
-import instanceAxios from "../lib/instanceAxios";
-import { useUserContext } from "../hooks";
+import { useUserContext, useTransaction } from "../hooks";
 import { useFilterDate } from "../utils/filterDate";
-import { getValueFor } from "../utils/SecureStore";
+import { listData } from "../data/constant";
 
 import { globals, transactionStyle } from "../styles";
 
 const Transaction = ({ navigation }) => {
   const [collapse, setCollapse] = useState(false);
-  const [transactions, setTransactions] = useState([]);
-  const [list, setList] = useState([
-    {
-      id: 0,
-      label: "Today",
-      checked: true,
-    },
-    {
-      id: 1,
-      label: "Week",
-      checked: false,
-    },
-    {
-      id: 2,
-      label: "Month",
-      checked: false,
-    },
-  ]);
+  const { user } = useUserContext();
+  const { transactions } = useTransaction({ id: user.id, student: user.student, refresh: user.refresh });
+  const [list, setList] = useState(listData);
   const [filterTransaction, setFilterTransaction] = useState([]);
 
-  const { user } = useUserContext();
   const filterDate = useFilterDate();
 
   const onCollapse = () => setCollapse(prev => !prev);
-
-  const getTransactions = (id, token) => {
-    return instanceAxios
-      .get(`/api/transactions/cafe/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then(res => res.data)
-      .catch(() => false);
-  };
 
   const onList = id =>
     setList(prev =>
@@ -80,22 +52,13 @@ const Transaction = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    const fetch = async () => {
-      const token = await getValueFor("accessToken");
-      const res = await getTransactions(user.id, token);
-
-      res && setTransactions(res);
-    };
-    fetch();
-  }, [user.refresh]);
-
-  useEffect(() => {
     list.map(({ checked, id }) => {
       const filtered = filterDate(transactions);
       if (checked) {
-        id === 0 && setFilterTransaction(filtered.today);
-        id === 1 && setFilterTransaction(filtered.week);
-        id === 2 && setFilterTransaction(filtered.month);
+        id === 0 && setFilterTransaction(filtered.getAll);
+        id === 1 && setFilterTransaction(filtered.getToday);
+        id === 2 && setFilterTransaction(filtered.getWeek);
+        id === 3 && setFilterTransaction(filtered.getMonth);
       }
     });
   }, [list, transactions]);
@@ -104,24 +67,32 @@ const Transaction = ({ navigation }) => {
     <View style={[globals.container]}>
       <Refresh>
         <View style={{ paddingBottom: 24 }}>
-          {filterTransaction.length > 0 &&
-            filterTransaction.map(({ sender, amount, created_at }, i) => {
-              return (
-                <View style={transactionStyle.transactionItemWrap} key={i}>
-                  <TransactionItem
-                    field1={sender}
-                    time={moment(created_at).format("h.mma")}
-                    date={moment(created_at).format("D-MM")}
-                    amount={amount}
-                    cafe={true}
-                    noBorder={true}
-                  />
-                </View>
-              );
-            })}
+          {filterTransaction?.map(({ sender, amount, created_at, transaction_id, cafe_name, student_name }, i) => {
+            let details = {
+              sender: `${student_name} (${sender})`,
+              recipient: cafe_name,
+              transactionId: transaction_id,
+              amount: `RM${amount}`,
+              date: `${moment(created_at).format("D-MM-YYYY")} at ${moment(created_at).format("h.mma")}`
+            }
+
+            return (
+              <View style={transactionStyle.transactionItemWrap} key={i}>
+                <TransactionItem
+                  field1={sender}
+                  time={moment(created_at).format("h.mma")}
+                  date={moment(created_at).format("D-MM")}
+                  amount={amount}
+                  cafe={!user.student}
+                  noBorder={true}
+                  navigate={() => navigation.navigate("Transaction Details", { data: details })}
+                />
+              </View>
+            );
+          })}
         </View>
       </Refresh>
-      {filterTransaction.length === 0 && (
+      {filterTransaction?.length === 0 && (
         <Text
           style={{
             flex: 1,

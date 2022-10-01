@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import CheckBox from "expo-checkbox";
 
-const TransactionItem = ({ noBorder, field1, time, date, amount, cafe }) => {
+const TransactionItem = ({ navigate, noBorder, field1, time, date, amount, cafe }) => {
   const [checked, setChecked] = useState(false);
 
   return (
-    <View
+    <TouchableOpacity
+      activeOpacity={0.75}
+      onPress={navigate}
       style={[
         transactionItemStyle.transactionItem,
         noBorder ? "" : transactionItemStyle.transactionItemBorder,
@@ -36,7 +38,7 @@ const TransactionItem = ({ noBorder, field1, time, date, amount, cafe }) => {
           </TouchableOpacity>
         )}
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

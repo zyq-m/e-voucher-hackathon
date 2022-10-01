@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
-import { RefreshControl, ScrollView } from "react-native";
+import { Platform, RefreshControl, ScrollView, View } from "react-native";
+import { RefreshControl as WebRefreshControl } from 'react-native-web-refresh-control'
 import { useUserContext } from "../hooks";
 
 const Refresh = ({ children }) => {
@@ -18,16 +19,30 @@ const Refresh = ({ children }) => {
     });
   }, []);
 
-  return (
-    <ScrollView
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
-      style={{ paddingHorizontal: 16 }}
-    >
-      {children}
-    </ScrollView>
-  );
+  if (Platform.OS === "web") {
+    return (
+      <ScrollView
+        refreshControl={
+          <WebRefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        <View style={{ paddingHorizontal: 16 }}>
+          {children}
+        </View>
+      </ScrollView>
+    )
+  } else {
+    return (
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        style={{ paddingHorizontal: 16 }}
+      >
+        {children}
+      </ScrollView>
+    );
+  }
 };
 
 export default Refresh;

@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Platform } from "react-native";
 
 import { Button } from "../components";
 import { getStudentTransactions } from "../lib/API";
-import { getValueFor } from "../utils/SecureStore";
 import { useUserContext } from "../hooks";
 
 import { globals, payNowStyle } from "../styles";
@@ -31,25 +30,32 @@ const PayNow = ({ navigation }) => {
       amount = 2;
     }
 
-    transactionDate.length < 3
-      ? navigation.navigate("QR Scan", { amount: amount })
-      : alert("You only can make 3 transactions per day");
+    let total = amount;
+    transactionDate.forEach(({ amount }) => {
+      total += parseInt(amount)
+    })
+
+    if (total <= 6) {
+      if (Platform.OS === 'web') {
+        navigation.navigate("Cafe List", { amount: amount })
+      } else {
+        navigation.navigate("QR Scan", { amount: amount })
+      }
+    } else {
+      alert("You only can spend RM6 per day");
+    }
   };
 
   useEffect(() => {
-    getValueFor("accessToken")
-      .then(token =>
-        getStudentTransactions(token, user.id).then(res => {
-          const filtered = res.filter(
-            data =>
-              moment(data.created_at).format("D-MM-YY") ===
-              moment().format("D-MM-YY")
-          );
-
-          setTransactionDate(filtered);
-        })
-      )
-      .catch(() => console.log("Error"));
+    getStudentTransactions(user.id)
+      .then(res => {
+        return res.filter(
+          data =>
+            moment(data.created_at).format("D-MM-YY") ===
+            moment().format("D-MM-YY")
+        );
+      }).then((filtered) => setTransactionDate(filtered))
+      .catch((error) => console.warn(error))
   }, []);
 
   return (
