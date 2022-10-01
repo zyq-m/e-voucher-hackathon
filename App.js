@@ -6,11 +6,16 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "./pages/Login";
 import Transaction from "./pages/Transaction";
 import TransactionDetail from "./pages/TransactionDetail";
-import { StudentNav as Student, CafeNav as Cafe } from "./navigators";
+import Dashboard from "./pages/Dashboard";
+
+import PayNow from "./pages/PayNow";
+import QRScan from "./pages/QRScan";
+import CafeList from "./pages/CafeList";
+import MyQRCode from "./pages/MyQRCode";
 
 import { UserContext } from "./lib/Context";
 
-export const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [user, setUser] = useState({
@@ -25,35 +30,51 @@ export default function App() {
       <UserContext.Provider value={{ user, setUser }}>
         <Stack.Navigator
           initialRouteName="login"
-          screenOptions={{ headerShown: false }}
-        >
-          {user.login ? (
+          screenOptions={{ headerTitleAlign: "center", animation: "fade_from_bottom" }}>
+          {user.login && (
             <>
-              {user.student ? (
-                <Stack.Screen name="Student" component={Student} />
-              ) : (
-                <Stack.Screen name="Cafe" component={Cafe} />
-              )}
+              <Stack.Screen
+                name="QR Scan"
+                component={QRScan}
+              />
+              <Stack.Screen
+                name="Pay"
+                component={PayNow}
+                options={{
+                  title: "Choose amount",
+                }}
+              />
+              <Stack.Screen
+                name="Cafe List"
+                component={CafeList}
+                options={{
+                  title: "Confirmation",
+                }}
+              />
+              <Stack.Screen
+                name="My QRCode"
+                component={MyQRCode}
+              />
+              <Stack.Screen
+                name="Dashboard"
+                component={Dashboard}
+                options={{ headerShown: false }}
+              />
               <Stack.Screen
                 name="Transactions"
                 component={Transaction}
-                options={{
-                  headerTitleAlign: "center",
-                  headerShown: true
-                }}
               />
               <Stack.Screen
                 name="Transaction Details"
                 component={TransactionDetail}
-                options={{
-                  headerTitleAlign: "center",
-                  headerShown: true
-                }}
               />
             </>
-          ) : (
-            <Stack.Screen name="login" component={Login} />
           )}
+          <Stack.Screen
+            name="login"
+            component={Login}
+            options={{ headerShown: false }}
+          />
         </Stack.Navigator>
         <StatusBar style="auto" />
       </UserContext.Provider>
