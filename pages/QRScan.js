@@ -4,7 +4,6 @@ import { BarCodeScanner } from "expo-barcode-scanner";
 
 import { Button } from "../components";
 import { setTransactions } from "../lib/API/setTransaction";
-import { getValueFor } from "../utils/SecureStore";
 import { useUserContext } from "../hooks";
 
 import { globals, QRScanStyle } from "../styles";
@@ -41,8 +40,7 @@ const QRScan = ({ navigation, route }) => {
     };
 
     if (cafeId) {
-      const token = await getValueFor("accessToken");
-      setTransactions(cafeId, token, bodyData)
+      setTransactions({ id: cafeId, data: bodyData })
         .then(() => {
           alert("Payment successful👍");
           navigate();

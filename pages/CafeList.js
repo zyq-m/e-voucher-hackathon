@@ -15,7 +15,7 @@ const CafeList = ({ navigation, route }) => {
   const { user } = useUserContext();
 
   const [radioBtn, setRadioBtn] = useState([]);
-  const [selectedCafe, setSelectedCafe] = useState(undefined);
+  const [selectedCafe, setSelectedCafe] = useState('');
 
   const onSelected = i =>
     setRadioBtn(prev =>
@@ -31,38 +31,36 @@ const CafeList = ({ navigation, route }) => {
 
   const onPress = () => {
     selectedCafe &&
-      getValueFor("accessToken").then(token =>
-        setTransactions(selectedCafe, token, {
+      setTransactions({
+        id: selectedCafe, data: {
           sender: user.id,
           amount: amount,
+        }
+      })
+        .then(() => {
+          alert("Payment successful👍");
+          navigation.navigate("Dashboard");
         })
-          .then(() => {
-            alert("Payment successful👍");
-            navigation.navigate("Student Dashboard");
-          })
-          .catch(err => {
-            console.error(err);
-            alert("Error occur");
-            navigation.navigate("Student Dashboard");
-          })
-      );
+        .catch(err => {
+          console.error(err);
+          alert("Error occur");
+          navigation.navigate("Dashboard");
+        })
   };
 
   useEffect(() => {
-    getValueFor("accessToken").then(token =>
-      getCafe(token)
-        .then(res => {
-          let newArr = res.map((data, i) => ({
-            id: i,
-            label: data.cafe_name,
-            value: data.username,
-            selected: false,
-          }));
+    getCafe()
+      .then(res => {
+        let newArr = res.map((data, i) => ({
+          id: i,
+          label: data.cafe_name,
+          value: data.username,
+          selected: false,
+        }));
 
-          setRadioBtn(newArr);
-        })
-        .catch(() => alert("Please login again"))
-    );
+        setRadioBtn(newArr);
+      })
+      .catch(() => alert("Please login again"))
   }, []);
 
   return (
