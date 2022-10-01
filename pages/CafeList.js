@@ -47,7 +47,7 @@ const CafeList = ({ navigation, route }) => {
         })
   };
 
-  useEffect(() => {
+  const fetchCafe = () => {
     getCafe()
       .then(res => {
         let newArr = res.map((data, i) => ({
@@ -60,7 +60,15 @@ const CafeList = ({ navigation, route }) => {
         setRadioBtn(newArr);
       })
       .catch(() => alert("Please login again"))
-  }, [user.refresh]);
+  }
+
+  useEffect(() => {
+    fetchCafe()
+  }, []);
+
+  useEffect(() => {
+    user.refresh && fetchCafe()
+  }, [user.refresh])
 
   return (
     <View style={[globals.container]}>
