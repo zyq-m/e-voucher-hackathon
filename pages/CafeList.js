@@ -2,11 +2,10 @@ import { useEffect, useState } from "react";
 import { View, Text } from "react-native";
 import { RadioButton } from "react-native-radio-buttons-group";
 
-import { Button } from "../components";
+import { Button, Refresh } from "../components";
 
 import { useUserContext } from "../hooks";
 import { getCafe, setTransactions } from "../lib/API";
-import { getValueFor } from "../utils/SecureStore";
 
 import { globals, payNowStyle } from "../styles";
 
@@ -61,30 +60,32 @@ const CafeList = ({ navigation, route }) => {
         setRadioBtn(newArr);
       })
       .catch(() => alert("Please login again"))
-  }, []);
+  }, [user.refresh]);
 
   return (
-    <View style={[globals.container, { paddingHorizontal: 16 }]}>
-      <View style={{ flex: 1, justifyContent: "center" }}>
-        <Text style={[payNowStyle.textCenter, payNowStyle.payHeader]}>
-          Choose cafe
-        </Text>
-        {radioBtn.map(({ id, label, value, selected }) => {
-          return (
-            <RadioButton
-              key={id}
-              id={id}
-              label={label}
-              value={value}
-              selected={selected}
-              labelStyle={{ fontSize: 16 }}
-              containerStyle={{ marginTop: 16 }}
-              onPress={() => onSelected(id)}
-            />
-          );
-        })}
-      </View>
-      <View style={{ paddingBottom: 24 }}>
+    <View style={[globals.container]}>
+      <Refresh>
+        <View style={{ flex: 1, justifyContent: "center", marginVertical: 16 }}>
+          <Text style={[payNowStyle.textCenter, payNowStyle.payHeader]}>
+            Choose cafe
+          </Text>
+          {radioBtn.map(({ id, label, value, selected }) => {
+            return (
+              <RadioButton
+                key={id}
+                id={id}
+                label={label}
+                value={value}
+                selected={selected}
+                labelStyle={{ fontSize: 16 }}
+                containerStyle={{ marginTop: 16 }}
+                onPress={() => onSelected(id)}
+              />
+            );
+          })}
+        </View>
+      </Refresh>
+      <View style={{ paddingBottom: 24, paddingHorizontal: 16 }}>
         <Button label={"Confirm"} onPress={onPress} />
       </View>
     </View>

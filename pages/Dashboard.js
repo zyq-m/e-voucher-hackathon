@@ -13,10 +13,7 @@ import {
 
 import { useUserContext } from "../hooks";
 import { deleteItem } from "../utils/SecureStore";
-import { useCafe } from "../hooks/useCafe";
-import { useStudent } from "../hooks/useStudent";
-import { useTransaction } from "../hooks/useTransaction";
-
+import { useCafe, useStudent, useTransaction } from "../hooks";
 import { globals, dashboardStyle } from "../styles";
 
 const Dashboard = ({ navigation }) => {

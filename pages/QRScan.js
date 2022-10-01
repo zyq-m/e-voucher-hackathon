@@ -3,8 +3,9 @@ import { View, Image } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 
 import { Button } from "../components";
-import { setTransactions } from "../lib/API/setTransaction";
+import { setTransactions } from "../lib/API";
 import { useUserContext } from "../hooks";
+import { checkURL } from "../utils/checkURL";
 
 import { globals, QRScanStyle } from "../styles";
 
@@ -19,12 +20,6 @@ const QRScan = ({ navigation, route }) => {
     if (status === "granted") {
       setHasPermission(true);
     }
-  };
-
-  const checkURL = url => {
-    const arrURL = url.split("api/");
-    if (arrURL.length == 2) return arrURL[1];
-    else false;
   };
 
   const navigate = () => {

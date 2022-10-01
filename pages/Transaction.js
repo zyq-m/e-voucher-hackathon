@@ -4,9 +4,9 @@ import moment from "moment";
 
 import { Refresh, TransactionItem, FilterList } from "../components";
 
-import { useUserContext } from "../hooks";
+import { useUserContext, useTransaction } from "../hooks";
 import { useFilterDate } from "../utils/filterDate";
-import { useTransaction } from "../hooks/useTransaction";
+import { listData } from "../data/constant";
 
 import { globals, transactionStyle } from "../styles";
 
@@ -14,28 +14,7 @@ const Transaction = ({ navigation }) => {
   const [collapse, setCollapse] = useState(false);
   const { user } = useUserContext();
   const { transactions } = useTransaction({ id: user.id, student: user.student, refresh: user.refresh });
-  const [list, setList] = useState([
-    {
-      id: 0,
-      label: "All",
-      checked: true,
-    },
-    {
-      id: 1,
-      label: "Today",
-      checked: false,
-    },
-    {
-      id: 2,
-      label: "Week",
-      checked: false,
-    },
-    {
-      id: 3,
-      label: "Month",
-      checked: false,
-    },
-  ]);
+  const [list, setList] = useState(listData);
   const [filterTransaction, setFilterTransaction] = useState([]);
 
   const filterDate = useFilterDate();
