@@ -1,0 +1,26 @@
+{
+  "cli": {
+    "version": ">= 2.1.0"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "distribution": "internal"
+    },
+    "preview2": {
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "REACT_APP_API_KEY": "https://e-voucher-api.herokuapp.com"
+      }
+    },
+    "production": {}
+  },
+  "submit": {
+    "production": {}
+  }
+}
