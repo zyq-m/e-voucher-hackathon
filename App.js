@@ -29,12 +29,12 @@ export default function App() {
     <NavigationContainer>
       <UserContext.Provider value={{ user, setUser }}>
         <Stack.Navigator
-          initialRouteName="login"
+          initialRouteName="Dashboard"
           screenOptions={{
             headerTitleAlign: "center",
             animation: "fade_from_bottom",
           }}>
-          {user.login && (
+          {user.login ? (
             <>
               <Stack.Screen name="QR Scan" component={QRScan} />
               <Stack.Screen
@@ -63,12 +63,14 @@ export default function App() {
                 component={TransactionDetail}
               />
             </>
-          )}
-          <Stack.Screen
-            name="login"
-            component={Login}
-            options={{ headerShown: false }}
-          />
+          ) : (
+            <Stack.Screen
+              name="login"
+              component={Login}
+              options={{ headerShown: false }}
+            />
+          )
+          }
         </Stack.Navigator>
         <StatusBar style="auto" />
       </UserContext.Provider>
