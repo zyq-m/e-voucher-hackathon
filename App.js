@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -14,6 +14,7 @@ import {
   TransactionDetail,
 } from "./pages";
 import { UserContext } from "./lib/Context";
+import { getValueFor } from "./utils/SecureStore";
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +26,27 @@ export default function App() {
     refresh: false,
   });
 
+  const getInitialValue = async () => {
+    try {
+      const id = await getValueFor("id");
+      const login = await getValueFor("login");
+      const student = await getValueFor("student");
+
+      setUser(prev => ({
+        ...prev,
+        id: id,
+        login: JSON.parse(login),
+        student: JSON.parse(student),
+      }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getInitialValue();
+  }, []);
+
   return (
     <NavigationContainer>
       <UserContext.Provider value={{ user, setUser }}>
@@ -32,6 +54,7 @@ export default function App() {
           initialRouteName="Dashboard"
           screenOptions={{
             headerTitleAlign: "center",
+            headerStyle: { backgroundColor: "#FFD400" },
             animation: "fade_from_bottom",
           }}>
           {user.login ? (
@@ -69,8 +92,7 @@ export default function App() {
               component={Login}
               options={{ headerShown: false }}
             />
-          )
-          }
+          )}
         </Stack.Navigator>
         <StatusBar style="auto" />
       </UserContext.Provider>

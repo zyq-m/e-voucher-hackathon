@@ -1,6 +1,7 @@
 import { View, Image, Text, TouchableOpacity, Platform } from "react-native";
 import { printToFileAsync, printAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
+import html2pdf from "html2pdf.js"
 
 import Button from "./Button";
 import FilterItem from "./FilterItem";
@@ -16,7 +17,8 @@ const FilterList = ({ onCollapse, list, onList, document }) => {
     // On iOS/android prints the given html. On web prints the HTML from the current page.
     try {
       if (Platform.OS === 'web') {
-        await printAsync({ html: DocumentTemplate(document) })
+        html2pdf().from(DocumentTemplate(document), 'string').save('trasaction-history')
+        // console.log(html2pdf())
       } else {
         const { uri } = await printToFileAsync({
           html: DocumentTemplate(document),

@@ -10,7 +10,7 @@ const container = StyleSheet.create({
     overflow: "hidden",
     backgroundColor: "rgba(255, 255, 255, 1)",
     borderRadius: 9,
-    borderColor: "rgba(0, 0, 0, 0.08)",
+    borderColor: "rgba(0, 0, 0, 0.11)",
     borderWidth: 1,
   },
 });
