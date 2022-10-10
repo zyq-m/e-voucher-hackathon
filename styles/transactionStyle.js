@@ -4,7 +4,7 @@ const transactionStyle = StyleSheet.create({
   transactionItemWrap: {
     marginTop: 6,
     borderRadius: 9,
-    borderColor: "rgba(0, 0, 0, 0.08)",
+    borderColor: "rgba(0, 0, 0, 0.11)",
     borderWidth: 1,
     overflow: "hidden",
   },

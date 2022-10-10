@@ -2,7 +2,15 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import CheckBox from "expo-checkbox";
 
-const TransactionItem = ({ navigate, noBorder, field1, time, date, amount, cafe }) => {
+const TransactionItem = ({
+  navigate,
+  noBorder,
+  field1,
+  time,
+  date,
+  amount,
+  cafe,
+}) => {
   const [checked, setChecked] = useState(false);
 
   return (
@@ -12,8 +20,7 @@ const TransactionItem = ({ navigate, noBorder, field1, time, date, amount, cafe 
       style={[
         transactionItemStyle.transactionItem,
         noBorder ? "" : transactionItemStyle.transactionItemBorder,
-      ]}
-    >
+      ]}>
       <View>
         <Text style={{ fontWeight: "500" }}>{field1}</Text>
         <View style={{ flexDirection: "row" }}>
@@ -22,8 +29,7 @@ const TransactionItem = ({ navigate, noBorder, field1, time, date, amount, cafe 
             style={[
               transactionItemStyle.transactionSmallTxt,
               { marginLeft: 12 },
-            ]}
-          >
+            ]}>
             {date}
           </Text>
         </View>
@@ -52,7 +58,7 @@ const transactionItemStyle = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 1)",
   },
   transactionItemBorder: {
-    borderTopColor: "rgba(0, 0, 0, 0.08)",
+    borderTopColor: "rgba(0, 0, 0, 0.11)",
     borderTopWidth: 1,
   },
   transactionSmallTxt: {
