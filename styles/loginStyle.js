@@ -19,7 +19,7 @@ const loginStyle = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: 9,
     borderWidth: 1,
-    borderColor: "rgba(0, 0, 0, 0.08)",
+    borderColor: "rgba(0, 0, 0, 0.11)",
     backgroundColor: "rgba(255, 255, 255, 1)",
   },
   inputLabel: {
@@ -29,7 +29,7 @@ const loginStyle = StyleSheet.create({
   input: {
     flex: 1,
     marginLeft: 10,
-    outlineStyle: 'none'
+    outlineStyle: "none",
   },
   smallText: {
     marginTop: 21,

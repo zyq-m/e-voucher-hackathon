@@ -22,7 +22,7 @@ const filterStyle = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 13,
     paddingBottom: 0,
-    backgroundColor: "rgba(255, 247, 217, 1)",
+    backgroundColor: "#f2f2f2",
     borderTopRightRadius: 9,
     borderTopLeftRadius: 9,
   },

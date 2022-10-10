@@ -28,20 +28,24 @@ export default function App() {
 
   const getInitialValue = async () => {
     try {
-      const id = await getValueFor('id')
-      const login = await getValueFor('login')
-      const student = await getValueFor('student')
+      const id = await getValueFor("id");
+      const login = await getValueFor("login");
+      const student = await getValueFor("student");
 
-      setUser((prev) => ({ ...prev, id: id, login: JSON.parse(login), student: JSON.parse(student) }))
-
+      setUser(prev => ({
+        ...prev,
+        id: id,
+        login: JSON.parse(login),
+        student: JSON.parse(student),
+      }));
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
-    getInitialValue()
-  }, [])
+    getInitialValue();
+  }, []);
 
   return (
     <NavigationContainer>
@@ -50,6 +54,7 @@ export default function App() {
           initialRouteName="Dashboard"
           screenOptions={{
             headerTitleAlign: "center",
+            headerStyle: { backgroundColor: "#FFD400" },
             animation: "fade_from_bottom",
           }}>
           {user.login ? (
@@ -87,8 +92,7 @@ export default function App() {
               component={Login}
               options={{ headerShown: false }}
             />
-          )
-          }
+          )}
         </Stack.Navigator>
         <StatusBar style="auto" />
       </UserContext.Provider>
