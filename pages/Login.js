@@ -7,6 +7,7 @@ import { useUserContext } from "../hooks";
 import { Button, Input } from "../components";
 
 import { globals, loginStyle } from "../styles";
+import { save } from "../utils/SecureStore";
 
 const Login = ({ navigation }) => {
   const [cafeOwner, setCafeOwner] = useState(false);
@@ -21,7 +22,7 @@ const Login = ({ navigation }) => {
       id: id,
       login: true,
       student: student || false,
-      cafe: cafe || false
+      cafe: cafe || false,
     }));
   };
 
@@ -33,6 +34,7 @@ const Login = ({ navigation }) => {
       });
 
       if (res) {
+        await save("id", cafeAcc);
         authUser({ id: cafeAcc, cafe: true });
         navigation.navigate("Dashboard");
       } else {
@@ -45,6 +47,8 @@ const Login = ({ navigation }) => {
       });
 
       if (res) {
+        await save("id", studentAcc);
+        await save("student", true);
         authUser({ id: studentAcc, student: true });
         navigation.navigate("Dashboard");
       } else {
@@ -58,8 +62,7 @@ const Login = ({ navigation }) => {
       style={[
         globals.container,
         { justifyContent: "center", paddingHorizontal: 16 },
-      ]}
-    >
+      ]}>
       <View>
         <Image
           style={loginStyle.logo}
@@ -86,8 +89,7 @@ const Login = ({ navigation }) => {
         </View>
         <Text
           style={loginStyle.smallText}
-          onPress={() => setCafeOwner(!cafeOwner)}
-        >
+          onPress={() => setCafeOwner(!cafeOwner)}>
           {cafeOwner ? "Are you a student?" : "Are you a cafe owner?"}
         </Text>
       </View>

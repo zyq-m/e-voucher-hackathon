@@ -12,7 +12,7 @@ import {
 } from "../components";
 
 import { useUserContext } from "../hooks";
-import { deleteItem } from "../utils/SecureStore";
+import { deleteItem, save } from "../utils/SecureStore";
 import { useCafe, useStudent, useTransaction } from "../hooks";
 import { globals, dashboardStyle } from "../styles";
 
@@ -36,6 +36,20 @@ const Dashboard = ({ navigation }) => {
     user.student ? navigation.navigate("Pay") : navigation.navigate("My QRCode")
   }
 
+  const onLogout = async () => {
+    await deleteItem("accessToken");
+    await deleteItem("refreshToken");
+    await deleteItem('id')
+    await deleteItem('login')
+    await deleteItem('student')
+    setUser(prev => ({
+      ...prev,
+      id: undefined,
+      login: false,
+      student: false,
+    }));
+  }
+
   useEffect(() => {
     transactions && countTotal()
   }, [transactions])
@@ -47,24 +61,8 @@ const Dashboard = ({ navigation }) => {
           <Profile
             textField1={cafe[0]?.cafe_name || students[0]?.student_name}
             textField2={cafe[0]?.username || students[0]?.matric_no}
+            onLogout={onLogout}
           />
-          <TouchableOpacity
-            onPress={async () => {
-              await deleteItem("accessToken");
-              await deleteItem("refreshToken");
-              setUser(prev => ({
-                ...prev,
-                id: undefined,
-                login: false,
-                student: false,
-              }));
-            }}
-          >
-            <Image
-              style={dashboardStyle.logoutIcon}
-              source={require("../assets/icons/logout-icon.png")}
-            />
-          </TouchableOpacity>
         </View>
         <View style={{ marginTop: 24 }}>
           <Amount amount={user.student ? students[0]?.wallet_amount : total} student={user.student} />
