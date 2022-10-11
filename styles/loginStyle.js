@@ -29,7 +29,6 @@ const loginStyle = StyleSheet.create({
   input: {
     flex: 1,
     marginLeft: 10,
-    outlineStyle: "none",
   },
   smallText: {
     marginTop: 21,
