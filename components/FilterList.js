@@ -1,7 +1,7 @@
 import { View, Image, Text, TouchableOpacity, Platform } from "react-native";
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
-import html2pdf from "html2pdf.js"; // comment this out before compile to android
+// import html2pdf from "html2pdf.js"; // comment this out before compile to android
 
 import Button from "./Button";
 import FilterItem from "./FilterItem";
@@ -17,9 +17,9 @@ const FilterList = ({ onCollapse, list, onList, document }) => {
     // On iOS/android prints the given html. On web prints the HTML from the current page.
     try {
       if (Platform.OS === "web") {
-        html2pdf()
-          .from(DocumentTemplate(document), "string")
-          .save("trasaction-history"); // comment this out before compile to android
+        // html2pdf()
+        //   .from(DocumentTemplate(document), "string")
+        //   .save("trasaction-history"); // comment this out before compile to android
       } else {
         const { uri } = await printToFileAsync({
           html: DocumentTemplate(document),
