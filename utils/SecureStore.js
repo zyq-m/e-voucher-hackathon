@@ -3,9 +3,17 @@ import { Platform } from "react-native";
 
 export const save = async (key, value) => {
   if (Platform.OS === "web") {
-    return localStorage.setItem(key, JSON.stringify(value));
+    if (typeof value === typeof "string") {
+      localStorage.setItem(key, value);
+    } else {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
   } else {
-    await SecureStore.setItemAsync(key, JSON.stringify(value));
+    if (typeof value === typeof "string") {
+      await SecureStore.setItemAsync(key, value);
+    } else {
+      await SecureStore.setItemAsync(key, JSON.stringify(value));
+    }
   }
 };
 
