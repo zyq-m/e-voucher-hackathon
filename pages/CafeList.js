@@ -14,7 +14,7 @@ const CafeList = ({ navigation, route }) => {
   const { user } = useUserContext();
 
   const [radioBtn, setRadioBtn] = useState([]);
-  const [selectedCafe, setSelectedCafe] = useState('');
+  const [selectedCafe, setSelectedCafe] = useState("");
 
   const onSelected = i =>
     setRadioBtn(prev =>
@@ -31,10 +31,11 @@ const CafeList = ({ navigation, route }) => {
   const onPress = () => {
     selectedCafe &&
       setTransactions({
-        id: selectedCafe, data: {
+        id: selectedCafe,
+        data: {
           sender: user.id,
           amount: amount,
-        }
+        },
       })
         .then(() => {
           alert("Payment successful👍");
@@ -44,7 +45,7 @@ const CafeList = ({ navigation, route }) => {
           console.error(err);
           alert("Error occur");
           navigation.navigate("Dashboard");
-        })
+        });
   };
 
   const fetchCafe = () => {
@@ -59,24 +60,21 @@ const CafeList = ({ navigation, route }) => {
 
         setRadioBtn(newArr);
       })
-      .catch(() => alert("Please login again"))
-  }
+      .catch(() => alert("Please login again"));
+  };
 
   useEffect(() => {
-    fetchCafe()
+    fetchCafe();
   }, []);
 
   useEffect(() => {
-    user.refresh && fetchCafe()
-  }, [user.refresh])
+    user.refresh && fetchCafe();
+  }, [user.refresh]);
 
   return (
     <View style={[globals.container]}>
       <Refresh>
         <View style={{ flex: 1, justifyContent: "center", marginVertical: 16 }}>
-          <Text style={[payNowStyle.textCenter, payNowStyle.payHeader]}>
-            Choose cafe
-          </Text>
           {radioBtn.map(({ id, label, value, selected }) => {
             return (
               <RadioButton
