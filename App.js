@@ -71,7 +71,7 @@ export default function App() {
                 name="Cafe List"
                 component={CafeList}
                 options={{
-                  title: "Confirmation",
+                  title: "Choose a cafe",
                 }}
               />
               <Stack.Screen name="My QRCode" component={MyQRCode} />

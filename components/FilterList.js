@@ -1,7 +1,7 @@
 import { View, Image, Text, TouchableOpacity, Platform } from "react-native";
-import { printToFileAsync, printAsync } from "expo-print";
+import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
-import html2pdf from "html2pdf.js"
+// import html2pdf from "html2pdf.js"; // comment this out before compile to android
 
 import Button from "./Button";
 import FilterItem from "./FilterItem";
@@ -11,14 +11,15 @@ import { useUserContext } from "../hooks";
 import filterStyle from "../styles/filterStyle";
 
 const FilterList = ({ onCollapse, list, onList, document }) => {
-  const { user } = useUserContext()
+  const { user } = useUserContext();
 
   const generatePDF = async () => {
     // On iOS/android prints the given html. On web prints the HTML from the current page.
     try {
-      if (Platform.OS === 'web') {
-        html2pdf().from(DocumentTemplate(document), 'string').save('trasaction-history')
-        // console.log(html2pdf())
+      if (Platform.OS === "web") {
+        // html2pdf()
+        //   .from(DocumentTemplate(document), "string")
+        //   .save("trasaction-history"); // comment this out before compile to android
       } else {
         const { uri } = await printToFileAsync({
           html: DocumentTemplate(document),
@@ -26,12 +27,15 @@ const FilterList = ({ onCollapse, list, onList, document }) => {
         await shareAsync(uri, { UTI: ".pdf", mimeType: "application/pdf" });
       }
     } catch (error) {
-      console.warn(error)
+      console.warn(error);
     }
   };
 
   return (
-    <TouchableOpacity activeOpacity={0} style={filterStyle.fitlerBackDrop} onPress={onCollapse}>
+    <TouchableOpacity
+      activeOpacity={0}
+      style={filterStyle.fitlerBackDrop}
+      onPress={onCollapse}>
       <View style={filterStyle.filterContainer}>
         <View style={[filterStyle.filterRow, { paddingTop: 10 }]}>
           <TouchableOpacity onPress={onCollapse}>
@@ -52,12 +56,11 @@ const FilterList = ({ onCollapse, list, onList, document }) => {
             />
           ))}
         </View>
-        {
-          !(user.student) &&
+        {!user.student && (
           <View style={{ marginBottom: 20 }}>
             <Button label={"Print"} onPress={generatePDF} />
           </View>
-        }
+        )}
       </View>
     </TouchableOpacity>
   );
