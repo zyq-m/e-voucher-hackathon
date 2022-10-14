@@ -10,7 +10,7 @@
     "preview": {
       "distribution": "internal"
     },
-    "preview2": {
+    "localApk": {
       "android": {
         "buildType": "apk"
       },
