@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "e-voucer",
+    "name": "e-Voucher",
     "slug": "e-voucher",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -30,7 +30,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "67b6d53d-5fe1-4332-9338-6dabedd106d0"
+        "projectId": "f81db072-e0ad-409b-b65f-b1c2df4b70bc"
       }
     }
   }
