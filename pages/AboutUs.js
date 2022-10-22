@@ -121,7 +121,7 @@ const CardWrap = () => {
         }}>
         <Card img={require("../assets/team-pic/nabil.jpg")} name={"nabil"} />
         <Card img={require("../assets/team-pic/haziq.jpg")} name={"haziq"} />
-        <Card img={require("../assets/team-pic/nabil.jpg")} name={"fauzan"} />
+        <Card img={require("../assets/team-pic/oneng.jpg")} name={"fauzan"} />
       </View>
     </>
   );

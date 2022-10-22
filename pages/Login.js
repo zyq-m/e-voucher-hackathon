@@ -64,10 +64,7 @@ const Login = ({ navigation }) => {
         { justifyContent: "center", paddingHorizontal: 16 },
       ]}>
       <View>
-        <Image
-          style={loginStyle.logo}
-          source={require("../assets/logo-unisza.png")}
-        />
+        <Image style={loginStyle.logo} source={require("../assets/icon.png")} />
         <Text style={loginStyle.loginHeader}>Welcome Back</Text>
         {cafeOwner ? (
           <Input label={"Username |"} value={cafeAcc} onChange={setCafeAcc} />
