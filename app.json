@@ -28,9 +28,7 @@
         "backgroundColor": "#FFD400"
       },
       "package": "com.zyq.m.b40ewallet",
-      "runtimeVersion": {
-        "policy": "sdkVersion"
-      }
+      "runtimeVersion": "exposdk:45.0.0"
     },
     "web": {
       "favicon": "./assets/favicon.png"
