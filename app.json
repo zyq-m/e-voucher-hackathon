@@ -2,28 +2,35 @@
   "expo": {
     "name": "e-Voucher",
     "slug": "e-voucher",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#FFF7D9"
+      "backgroundColor": "#FFD400"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/f81db072-e0ad-409b-b65f-b1c2df4b70bc"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "runtimeVersion": {
+        "policy": "sdkVersion"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "backgroundColor": "#FFD400"
       },
-      "package": "com.zyq.m.b40ewallet"
+      "package": "com.zyq.m.b40ewallet",
+      "runtimeVersion": {
+        "policy": "sdkVersion"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
